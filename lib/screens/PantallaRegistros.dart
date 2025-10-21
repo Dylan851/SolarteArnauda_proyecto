@@ -16,9 +16,10 @@ class PantallaRegistros extends StatefulWidget {
 
 const List<String> _listaLugares = <String>[
   "Madrid",
-  "barcelona",
+  "Barcelona",
   "Sevilla",
   "Zaragoza",
+  "Alicante",
 ];
 
 class _PantallaRegistrosState extends State<PantallaRegistros> {
