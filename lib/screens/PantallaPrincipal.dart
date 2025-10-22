@@ -54,7 +54,6 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // ignore: avoid_unnecessary_containers
             Container(
               child: Image.asset(
                 'assets/images/Logo.png',
@@ -80,7 +79,6 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
               child: TextFormField(
                 obscureText: true,
                 decoration: InputDecoration(
-                  //labelText: "Contraseña",
                   labelText: "Contraseña",
                   border: OutlineInputBorder(),
                 ),
@@ -104,6 +102,68 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
               ),
               onPressed: _PantallaRegistros,
               child: Text("Registrate", style: TextStyle(color: Colors.blue)),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                fixedSize: Size(300, 40),
+                backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    TextEditingController usernameController =
+                        TextEditingController();
+
+                    return AlertDialog(
+                      title: Text('Recuperar contraseña'),
+                      content: TextField(
+                        controller: usernameController,
+                        decoration: InputDecoration(
+                          labelText: 'Nombre de usuario',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Cierra el diálogo
+                          },
+                          child: Text('Cancelar'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            if (usernameController.text.isEmpty) {
+                              print('Por favor, ingrese un nombre de usuario.');
+                              return;
+                            } else {
+                              var usuario = loginController.getUsuario(
+                                usernameController.text,
+                              );
+                              if (usuario == null) {
+                                print('El nombre de usuario no existe.');
+                                return;
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Contraseña recuperada: ${usuario.getPassword}',
+                                  ),
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Aceptar'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: Text('Recuperar contraseña'),
             ),
           ],
         ),
