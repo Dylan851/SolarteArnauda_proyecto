@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/screens/PantallaPrincipal.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
 
@@ -23,26 +24,9 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
       drawer: drawerGeneral(),
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(61, 180, 228, 1),
-        title: Text("Pantalla Secundaria"),
+        title: Text("Bienvenido ${usuarioActual?.name}"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 187, 228, 247),
-              ),
-              onPressed: _pantallaPrincipal,
-              child: Text(
-                "Pantalla principal",
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: Center(),
     );
   }
 }
