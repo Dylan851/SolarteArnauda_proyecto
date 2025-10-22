@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/screens/PantallaPrincipal.dart';
+import 'package:flutter_application/widgets/buttonNavegatorBarGeneral.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
 
 class PantallaSecundaria extends StatefulWidget {
@@ -26,7 +27,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
         backgroundColor: Color.fromRGBO(61, 180, 228, 1),
         title: Text("Bienvenido ${usuarioActual?.name}"),
       ),
-      body: Center(),
+      body: Center(child: Column(children: [buttonNavegatorBarGeneral()])),
     );
   }
 }
