@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/screens/GestionUsuarios.dart';
-import 'package:flutter_application/screens/GestionPedidos.dart';
-import 'package:flutter_application/screens/GestionProductos.dart';
-import 'package:flutter_application/screens/GestionInventario.dart';
+import 'package:flutter_application/screens/admin/GestionUsuarios.dart';
+import 'package:flutter_application/screens/admin/GestionPedidos.dart';
+import 'package:flutter_application/screens/admin/GestionProductos.dart';
+import 'package:flutter_application/screens/admin/GestionInventario.dart';
 
 class AdminHome extends StatelessWidget {
   const AdminHome({super.key});
@@ -19,7 +19,10 @@ class AdminHome extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              style: ElevatedButton.styleFrom(fixedSize: const Size(300, 50)),
+              style: ElevatedButton.styleFrom(
+                fixedSize: const Size(300, 50),
+                side: const BorderSide(color: Colors.blue, width: 1.5),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -32,7 +35,11 @@ class AdminHome extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(fixedSize: const Size(300, 50)),
+              style: ElevatedButton.styleFrom(
+                fixedSize: const Size(300, 50),
+
+                side: const BorderSide(color: Colors.blue, width: 1.5),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -45,7 +52,10 @@ class AdminHome extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(fixedSize: const Size(300, 50)),
+              style: ElevatedButton.styleFrom(
+                fixedSize: const Size(300, 50),
+                side: const BorderSide(color: Colors.blue, width: 1.5),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -58,7 +68,10 @@ class AdminHome extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(fixedSize: const Size(300, 50)),
+              style: ElevatedButton.styleFrom(
+                fixedSize: const Size(300, 50),
+                side: const BorderSide(color: Colors.blue, width: 1.5),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,

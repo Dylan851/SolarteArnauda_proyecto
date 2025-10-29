@@ -3,7 +3,7 @@ import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:flutter_application/controllers/LoginController.dart';
 import 'package:flutter_application/screens/PantallaSecundariaCliente.dart';
-import 'package:flutter_application/screens/AdminHome.dart';
+import 'package:flutter_application/screens/admin/AdminHome.dart';
 
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({super.key});
