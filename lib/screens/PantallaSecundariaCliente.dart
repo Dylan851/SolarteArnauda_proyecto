@@ -12,6 +12,7 @@ class PantallaSecundaria extends StatefulWidget {
 }
 
 class _PantallaSecundariaState extends State<PantallaSecundaria> {
+  // Navegar a Pantalla Principal
   void _pantallaPrincipal() {
     Navigator.push(
       context,
