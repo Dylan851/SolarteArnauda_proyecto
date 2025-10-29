@@ -3,6 +3,7 @@ import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:flutter_application/controllers/LoginController.dart';
 import 'package:flutter_application/screens/PantallaSecundariaCliente.dart';
+import 'package:flutter_application/screens/AdminHome.dart';
 
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({super.key});
@@ -23,6 +24,15 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
   void _validar() {
     if (nombre.isNotEmpty && _contrasena.isNotEmpty) {
+      // Caso especial: acceso admin con credenciales fijas
+      if (nombre == 'admin' && _contrasena == 'admin') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminHome()),
+        );
+        return;
+      }
+
       if (loginController.validarUsuario(nombre, _contrasena) == true) {
         usuarioActual = loginController.getUsuario(nombre);
         Navigator.push(
