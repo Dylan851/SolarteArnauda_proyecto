@@ -22,7 +22,7 @@ class AdminHome extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
                 side: const BorderSide(color: Colors.blue, width: 1.5),
-              ),
+              ), //esta es la gestion de usuarios
               onPressed: () {
                 Navigator.push(
                   context,
