@@ -1,17 +1,17 @@
 import 'package:flutter_application/models/User.dart';
 
-class Logicausuarios {
-  static final List<User> _ListaUsuarios = [
+class LogicaUsuarios {
+  static final List<User> _listaUsuarios = [
     User(name: "admin", password: "admin"),
   ];
 
-  //metodo para añadir usuarios
-  static void anadirUsuarios(User usuarios) {
-    _ListaUsuarios.add(usuarios);
+  // método para añadir un usuario
+  static void anadirUsuarios(User usuario) {
+    _listaUsuarios.add(usuario);
   }
 
-  //metodo para obtener la lista de usuarios
+  // método para obtener la lista de usuarios
   static List<User> getListaUsuarios() {
-    return _ListaUsuarios;
+    return _listaUsuarios;
   }
 }
