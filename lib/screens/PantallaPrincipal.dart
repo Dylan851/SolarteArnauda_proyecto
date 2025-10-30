@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:flutter_application/controllers/LoginController.dart';
-import 'package:flutter_application/screens/PantallaSecundariaCliente.dart';
+import 'package:flutter_application/screens/cliente/PantallaSecundariaCliente.dart';
 import 'package:flutter_application/screens/admin/AdminHome.dart';
 
 class PantallaPrincipal extends StatefulWidget {

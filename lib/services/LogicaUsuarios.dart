@@ -3,6 +3,8 @@ import 'package:flutter_application/models/User.dart';
 class Logicausuarios {
   static final List<User> _ListaUsuarios = [
     User(name: "admin", password: "admin"),
+    User(name: "dilan", password: "dilan"),
+    User(name: "miguel", password: "miguel"),
   ];
 
   //metodo para añadir usuarios
