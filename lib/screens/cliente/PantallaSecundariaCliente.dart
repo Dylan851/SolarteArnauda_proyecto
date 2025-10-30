@@ -28,7 +28,32 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
         backgroundColor: Color.fromRGBO(61, 180, 228, 1),
         title: Text("Bienvenido ${usuarioActual?.name}"),
       ),
-      body: Center(child: Column(children: [buttonNavegatorBarGeneral()])),
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      leading: Icon(Icons.person),
+                      title: Text('Nombre: ${usuarioActual?.name}'),
+                      subtitle: Text(
+                        'Edad: ${usuarioActual?.edad ?? 'No especificada'}\n'
+                        'Género: ${usuarioActual?.genero.toString().split('.').last ?? 'No especificado'}\n'
+                        'Lugar de Nacimiento: ${usuarioActual?.nacimiento ?? 'No especificado'}',
+                      ),
+                    ),
+                  );
+                },
+                itemCount: 1,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
