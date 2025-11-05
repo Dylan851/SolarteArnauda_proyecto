@@ -1,7 +1,7 @@
 import 'package:flutter_application/models/Productos.dart';
 
 class Logicaproductos {
-  static final List<Productos> _ListaProductos = [
+  static final List<Productos> ListaProductos = [
     Productos(
       nombre: "Producto 1",
       descripcion: "Descripción del Producto 1",
@@ -21,4 +21,11 @@ class Logicaproductos {
       imagenProducto: "assets/images/producto3.png",
     ),
   ];
+  static List<Productos> getlistaProductos() {
+    return ListaProductos;
+  }
+
+  static void anadirProducto(Productos producto) {
+    ListaProductos.add(producto);
+  }
 }
