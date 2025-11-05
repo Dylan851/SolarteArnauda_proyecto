@@ -5,7 +5,6 @@ import 'package:flutter_application/screens/admin/GestionProductos.dart';
 import 'package:flutter_application/screens/admin/GestionInventario.dart';
 
 class AdminHome extends StatelessWidget {
-  //pantalla principal del admin
   const AdminHome({super.key});
 
   @override

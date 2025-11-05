@@ -7,9 +7,11 @@ class User {
   int? edad;
   String? nacimiento;
   String? photoPath;
+  bool isAdmin;
   User({
     required this.name,
     required this.password,
+    this.isAdmin = false,
     this.genero,
     this.edad,
     this.nacimiento,
@@ -21,4 +23,7 @@ class User {
   int? get getEdad => edad;
   String? get getNacimiento => nacimiento;
   String? get getPhotoPath => photoPath;
+  bool get getIsAdmin => isAdmin;
+  bool isBlocked = false;
+  bool get getIsBlocked => isBlocked;
 }

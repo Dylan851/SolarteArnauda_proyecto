@@ -28,8 +28,9 @@ class loginController {
     String passwordIngresado,
     int? edad,
     String? photoPath,
-    String? lugarNacimientoIngersado,
-  ) {
+    String? lugarNacimientoIngersado, [
+    bool isAdmin = false,
+  ]) {
     LogicaUsuarios.anadirUsuarios(
       User(
         genero: generoIngresado,
@@ -38,6 +39,7 @@ class loginController {
         photoPath: photoPath,
         edad: edad,
         nacimiento: lugarNacimientoIngersado,
+        isAdmin: isAdmin,
       ),
     );
   }
