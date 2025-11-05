@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
-import 'package:flutter_application/screens/PantallaPrincipal.dart';
-import 'package:flutter_application/widgets/buttonNavegatorBarGeneral.dart';
+import 'package:flutter_application/controllers/LoginProductos.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
 
 class PantallaSecundaria extends StatefulWidget {
@@ -12,14 +11,6 @@ class PantallaSecundaria extends StatefulWidget {
 }
 
 class _PantallaSecundariaState extends State<PantallaSecundaria> {
-  // Navegar a Pantalla Principal
-  void _pantallaPrincipal() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const PantallaPrincipal()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,23 +23,20 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
         child: Column(
           children: [
             SizedBox(height: 20),
-
             Expanded(
               child: ListView.builder(
+                itemCount: Loginproductos.recorrerProductos().length,
                 itemBuilder: (context, index) {
+                  // Accedemos a cada detalle del producto
+                  String detalleProducto =
+                      Loginproductos.recorrerProductos()[index];
                   return Card(
                     child: ListTile(
                       leading: Icon(Icons.person),
-                      title: Text('Nombre: ${usuarioActual?.name}'),
-                      subtitle: Text(
-                        'Edad: ${usuarioActual?.edad ?? 'No especificada'}\n'
-                        'Género: ${usuarioActual?.genero.toString().split('.').last ?? 'No especificado'}\n'
-                        'Lugar de Nacimiento: ${usuarioActual?.nacimiento ?? 'No especificado'}',
-                      ),
+                      title: Text(detalleProducto),
                     ),
                   );
                 },
-                itemCount: 1,
               ),
             ),
           ],
