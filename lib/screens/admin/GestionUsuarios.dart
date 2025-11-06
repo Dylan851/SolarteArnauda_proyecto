@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/screens/admin/EditarUsuario.dart';
 import 'package:flutter_application/screens/admin/PantallaRegistrosAdmin.dart';
 import 'package:flutter_application/services/LogicaUsuarios.dart';
 
@@ -48,18 +49,39 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                       title: Text(user.getName),
                       subtitle: Text(user.getPassword),
                       trailing: SizedBox(
-                        width: 120,
+                        width: 150,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
+                            if (user.getIsAdmin == true)
+                              const Icon(
+                                Icons.workspace_premium,
+                                color: Colors.amber,
+                                size: 20,
+                              ),
                             IconButton(
                               icon: const Icon(Icons.edit, color: Colors.blue),
                               onPressed: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Editar: ${user.getName}'),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditarUsuario(user: user),
                                   ),
-                                );
+                                ).then((edited) {
+                                  if (edited == true) {
+                                    setState(() {
+                                      users = LogicaUsuarios.getListaUsuarios();
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Usuario actualizado: ${user.getName}',
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                });
                               },
                             ),
                             IconButton(

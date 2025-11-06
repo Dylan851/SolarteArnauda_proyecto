@@ -1,15 +1,15 @@
 import 'package:flutter_application/services/LogicaProductos.dart';
 
-class Loginproductos {
-static List<Map<String, dynamic>> recorrerProductos() {
+class LoginProductos {
+  static List<Map<String, dynamic>> recorrerProductos() {
     List<Map<String, dynamic>> detalles = [];
-    for (var producto in Logicaproductos.ListaProductos) {
-
+    for (var producto in LogicaProductos.getListaProductos()) {
       detalles.add({
-        'nombre': producto.nombre,
-        'descripcion': producto.descripcion,
-        'precio': producto.precio,
-        'imagenProducto': producto.imagenProducto,
+        'nombre': producto.getNombre,
+        'descripcion': producto.getDescripcion,
+        'precio': producto.getPrecio,
+        'imagenProducto': producto.getImagenProducto,
+        'disponible': producto.getDisponible,
       });
     }
     return detalles;

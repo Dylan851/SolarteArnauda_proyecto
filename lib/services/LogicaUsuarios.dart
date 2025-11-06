@@ -1,4 +1,5 @@
 import 'package:flutter_application/models/User.dart';
+import 'package:flutter_application/screens/PantallaRegistros.dart';
 
 class LogicaUsuarios {
   static final List<User> _listaUsuarios = [
@@ -21,6 +22,32 @@ class LogicaUsuarios {
         u.isBlocked = !u.isBlocked;
         break;
       }
+    }
+  }
+
+  static void actualizarUsuario(
+    String nombreOriginal,
+    Genero? genero,
+    String nuevoNombre,
+    String nuevaContrasena,
+    int? edad,
+    String? photoPath,
+    String? lugarNacimiento,
+    bool isAdmin,
+  ) {
+    final index = _listaUsuarios.indexWhere((u) => u.name == nombreOriginal);
+    if (index != -1) {
+      final wasBlocked = _listaUsuarios[index].isBlocked;
+      _listaUsuarios[index] = User(
+        name: nuevoNombre,
+        password: nuevaContrasena,
+        isAdmin: isAdmin,
+        genero: genero,
+        edad: edad,
+        nacimiento: lugarNacimiento,
+        photoPath: photoPath,
+      );
+      _listaUsuarios[index].isBlocked = wasBlocked;
     }
   }
 

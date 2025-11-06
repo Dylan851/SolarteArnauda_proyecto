@@ -18,14 +18,17 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
   double _calcularTotal(List productos) {
     double total = 0;
     cantidades.forEach((index, cantidad) {
-      total += productos[index]['precio'] * cantidad;
+      // Solo calcular el total para productos disponibles
+      if (productos[index]['disponible'] == true) {
+        total += productos[index]['precio'] * cantidad;
+      }
     });
     return total;
   }
 
   @override
   Widget build(BuildContext context) {
-    final productos = Loginproductos.recorrerProductos();
+    final productos = LoginProductos.recorrerProductos();
 
     return Scaffold(
       drawer: drawerGeneral(),
@@ -41,10 +44,17 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
               itemCount: productos.length,
               itemBuilder: (context, index) {
                 final producto = productos[index];
+                // Solo mostrar productos disponibles
+                if (producto['disponible'] != true) {
+                  return const SizedBox.shrink(); // No mostrar productos no disponibles
+                }
                 final cantidad = cantidades[index] ?? 0;
 
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -140,9 +150,11 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                   onPressed: () {
                     // Aquí puedes navegar a la pantalla del carrito o mostrar los datos
                     Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PantallaCarritoCompra()),
-                  );
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PantallaCarritoCompra(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
@@ -154,10 +166,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                   icon: const Icon(Icons.shopping_cart),
                   label: const Text(
                     'Ver Carrito',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],

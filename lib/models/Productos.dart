@@ -3,15 +3,26 @@ class Productos {
   String descripcion;
   double precio;
   String? imagenProducto;
+  bool disponible;
 
   Productos({
     required this.nombre,
     required this.descripcion,
     required this.precio,
     required this.imagenProducto,
+    this.disponible = true,
   });
+
   String get getNombre => nombre;
   String get getDescripcion => descripcion;
   double get getPrecio => precio;
   String? get getImagenProducto => imagenProducto;
+  bool get getDisponible => disponible;
+
+  // Setters para la edición
+  set setNombre(String value) => nombre = value;
+  set setDescripcion(String value) => descripcion = value;
+  set setPrecio(double value) => precio = value;
+  set setImagenProducto(String? value) => imagenProducto = value;
+  set setDisponible(bool value) => disponible = value;
 }
