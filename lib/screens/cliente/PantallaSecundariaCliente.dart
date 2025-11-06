@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/controllers/LoginProductos.dart';
+import 'package:flutter_application/screens/PantallaPrincipal.dart';
+import 'package:flutter_application/screens/cliente/PantallaCarritoCompra.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
 
 class PantallaSecundaria extends StatefulWidget {
@@ -11,36 +13,158 @@ class PantallaSecundaria extends StatefulWidget {
 }
 
 class _PantallaSecundariaState extends State<PantallaSecundaria> {
+  // Mapa que guarda la cantidad seleccionada por cada producto
+  Map<int, int> cantidades = {};
+
+  double _calcularTotal(List productos) {
+    double total = 0;
+    cantidades.forEach((index, cantidad) {
+      total += productos[index]['precio'] * cantidad;
+    });
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final productos = Loginproductos.recorrerProductos();
+
     return Scaffold(
       drawer: drawerGeneral(),
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(61, 180, 228, 1),
+        backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
         title: Text("Bienvenido ${usuarioActual?.name}"),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: Loginproductos.recorrerProductos().length,
-                itemBuilder: (context, index) {
-                  // Accedemos a cada detalle del producto
-                  String detalleProducto =
-                      Loginproductos.recorrerProductos()[index];
-                  return Card(
-                    child: ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text(detalleProducto),
+      body: Column(
+        children: [
+          // 🔹 Lista de productos
+          Expanded(
+            child: ListView.builder(
+              itemCount: productos.length,
+              itemBuilder: (context, index) {
+                final producto = productos[index];
+                final cantidad = cantidades[index] ?? 0;
+
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        // Imagen del producto
+                        Image.asset(
+                          producto['imagenProducto'],
+                          width: 70,
+                          height: 70,
+                          fit: BoxFit.cover,
+                        ),
+                        const SizedBox(width: 10),
+
+                        // Información del producto
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                producto['nombre'],
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                producto['descripcion'],
+                                style: const TextStyle(fontSize: 13),
+                              ),
+                              Text(
+                                '\$${producto['precio'].toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Botones de + y -
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove_circle_outline),
+                              onPressed: () {
+                                setState(() {
+                                  if (cantidad > 0) {
+                                    cantidades[index] = cantidad - 1;
+                                  }
+                                });
+                              },
+                            ),
+                            Text(
+                              '$cantidad',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add_circle_outline),
+                              onPressed: () {
+                                setState(() {
+                                  cantidades[index] = cantidad + 1;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+
+          // 🔹 Botón fijo al final
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Total: \$${_calcularTotal(productos).toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    // Aquí puedes navegar a la pantalla del carrito o mostrar los datos
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PantallaCarritoCompra()),
+                  );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  icon: const Icon(Icons.shopping_cart),
+                  label: const Text(
+                    'Ver Carrito',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -3,22 +3,22 @@ import 'package:flutter_application/models/Productos.dart';
 class Logicaproductos {
   static final List<Productos> ListaProductos = [
     Productos(
-      nombre: "Producto 1",
-      descripcion: "Descripción del Producto 1",
+      nombre: "Pre Entreno Calavera",
+      descripcion: "Energía explosiva y máxima concentración para tus entrenamientos más intensos. Ideal para quienes buscan romper sus límites.",
       precio: 10.0,
-      imagenProducto: "assets/images/producto1.png",
+      imagenProducto: "assets/images/imagenesProductos/preEntrenoCalavera.png",
     ),
     Productos(
-      nombre: "Producto 2",
-      descripcion: "Descripción del Producto 2",
+      nombre: "Pre Entreno Goku",
+      descripcion: "Despierta tu poder interior con una fórmula avanzada que aumenta fuerza, enfoque y resistencia. ¡Entrena como un verdadero guerrero!",
       precio: 20.0,
-      imagenProducto: "assets/images/producto2.png",
+      imagenProducto: "assets/images/imagenesProductos/preEntrenoGoku.png",
     ),
     Productos(
-      nombre: "Producto 3",
-      descripcion: "Descripción del Producto 3",
+      nombre: "Pre Entreno Gorilla",
+      descripcion: "Potencia tu rendimiento con una dosis extrema de energía y bombeo muscular. Perfecto para sesiones de alto rendimiento.",
       precio: 30.0,
-      imagenProducto: "assets/images/producto3.png",
+      imagenProducto: "assets/images/imagenesProductos/preGorilla.png",
     ),
   ];
   static List<Productos> getlistaProductos() {
