@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/controllers/LoginProductos.dart';
-import 'package:flutter_application/screens/cliente/PantallaCarritoCompra.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
 
 class PantallaSecundaria extends StatefulWidget {
@@ -148,13 +147,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                 const SizedBox(height: 10),
                 ElevatedButton.icon(
                   onPressed: () {
-                    // Aquí puedes navegar a la pantalla del carrito o mostrar los datos
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PantallaCarritoCompra(),
-                      ),
-                    );
+                    // Comprar directamente desde aquí
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
@@ -165,7 +158,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                   ),
                   icon: const Icon(Icons.shopping_cart),
                   label: const Text(
-                    'Ver Carrito',
+                    'Comprar Ahora',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),

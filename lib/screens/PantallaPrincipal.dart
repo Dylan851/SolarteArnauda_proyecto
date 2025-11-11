@@ -68,7 +68,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           children: [
             Container(
               child: Image.asset(
-                'assets/images/Logo.png',
+                'assets/images/ronnieColeman.png',
                 width: 400,
                 height: 400,
               ),
@@ -129,7 +129,10 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                         TextEditingController();
 
                     return AlertDialog(
-                      title: Text('Recuperar contraseña'),
+                      title: Text(
+                        'Recuperar contraseña',
+                        style: TextStyle(color: Colors.blue),
+                      ),
                       content: TextField(
                         controller: usernameController,
                         decoration: InputDecoration(
@@ -175,7 +178,10 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                   },
                 );
               },
-              child: Text('Recuperar contraseña'),
+              child: Text(
+                'Recuperar contraseña',
+                style: TextStyle(color: Colors.blue),
+              ),
             ),
           ],
         ),
