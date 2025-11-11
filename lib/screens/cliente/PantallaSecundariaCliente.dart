@@ -32,8 +32,11 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
     return Scaffold(
       drawer: drawerGeneral(),
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
-        title: Text("Bienvenido ${usuarioActual?.name}"),
+        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+        title: Text(
+          "Bienvenido ${usuarioActual?.name}",
+          style: TextStyle(fontWeight: FontWeight.w400),
+        ),
       ),
       body: Column(
         children: [
@@ -150,16 +153,20 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                     // Comprar directamente desde aquí
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
+                    backgroundColor: const Color.fromARGB(255, 230, 14, 14),
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  icon: const Icon(Icons.shopping_cart),
+                  icon: const Icon(Icons.shopping_cart, color: Colors.black),
                   label: const Text(
                     'Comprar Ahora',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ],

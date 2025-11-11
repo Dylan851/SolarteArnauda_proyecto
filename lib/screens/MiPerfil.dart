@@ -15,7 +15,7 @@ class _MiperfilState extends State<Miperfil> {
     return Scaffold(
       drawer: drawerGeneral(),
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(61, 180, 228, 1),
+        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
         title: Text("Mi perfil"),
       ),
       body: Center(
