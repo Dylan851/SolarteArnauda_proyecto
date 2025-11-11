@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/models/Productos.dart';
 import 'package:flutter_application/screens/admin/EditarProducto.dart';
@@ -74,17 +75,25 @@ class _GestionProductosState extends State<GestionProductos> {
                           ? SizedBox(
                               width: 50,
                               height: 50,
-                              child:
-                                  producto.getImagenProducto!.startsWith(
-                                    'assets/',
-                                  )
-                                  ? Image.asset(
+                              child: kIsWeb
+                                  ? Image.network(
                                       producto.getImagenProducto!,
                                       fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              const Icon(
+                                                Icons.image_not_supported,
+                                              ),
                                     )
-                                  : Image.file(
-                                      File(producto.getImagenProducto!),
+                                  : Image.network(
+                                      // 👈 reemplazo seguro para web/móvil
+                                      producto.getImagenProducto!,
                                       fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              const Icon(
+                                                Icons.image_not_supported,
+                                              ),
                                     ),
                             )
                           : const CircleAvatar(child: Icon(Icons.shopping_bag)),
