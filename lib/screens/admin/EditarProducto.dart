@@ -81,7 +81,7 @@ class _EditarProductoState extends State<EditarProducto> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
+        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
         title: Text(
           widget.producto == null ? "Nuevo Producto" : "Editar Producto",
         ),
@@ -182,14 +182,16 @@ class _EditarProductoState extends State<EditarProducto> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size(300, 40),
-                    backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+                    backgroundColor: const Color.fromARGB(255, 230, 14, 14),
                   ),
                   onPressed: _guardar,
                   child: Text(
                     widget.producto == null
                         ? "Crear Producto"
                         : "Guardar Cambios",
-                    style: const TextStyle(color: Colors.blue),
+                    style: const TextStyle(
+                      color: const Color.fromARGB(255, 230, 14, 14),
+                    ),
                   ),
                 ),
               ),
@@ -198,12 +200,14 @@ class _EditarProductoState extends State<EditarProducto> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size(300, 40),
-                    backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+                    backgroundColor: const Color.fromARGB(255, 230, 14, 14),
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: const Text(
                     "Cancelar",
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 230, 14, 14),
+                    ),
                   ),
                 ),
               ),

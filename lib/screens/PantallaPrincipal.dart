@@ -59,7 +59,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(61, 180, 228, 1),
+        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
         title: Text("Pantalla Principal"),
       ),
       body: Center(
@@ -101,25 +101,31 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+                backgroundColor: const Color.fromARGB(255, 230, 14, 14),
               ),
               onPressed: _validar,
-              child: Text("Login", style: TextStyle(color: Colors.blue)),
+              child: Text(
+                "Login",
+                style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+              ),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+                backgroundColor: const Color.fromARGB(255, 230, 14, 14),
               ),
               onPressed: _PantallaRegistros,
-              child: Text("Registrate", style: TextStyle(color: Colors.blue)),
+              child: Text(
+                "Registrate",
+                style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+              ),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+                backgroundColor: const Color.fromARGB(255, 230, 14, 14),
               ),
               onPressed: () {
                 showDialog(
@@ -131,7 +137,9 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                     return AlertDialog(
                       title: Text(
                         'Recuperar contraseña',
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                        ),
                       ),
                       content: TextField(
                         controller: usernameController,
@@ -180,7 +188,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
               },
               child: Text(
                 'Recuperar contraseña',
-                style: TextStyle(color: Colors.blue),
+                style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
               ),
             ),
           ],

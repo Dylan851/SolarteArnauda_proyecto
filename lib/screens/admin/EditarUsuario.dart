@@ -116,7 +116,7 @@ class _EditarUsuarioState extends State<EditarUsuario> {
                         _generoSelecionado == Genero.Sr ? "Sr." : "Sra.",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                          color: const Color.fromARGB(255, 230, 14, 14),
                         ),
                       ),
                     ],
@@ -255,7 +255,7 @@ class _EditarUsuarioState extends State<EditarUsuario> {
                             "${widget.user.getEdad} años",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue,
+                              color: const Color.fromARGB(255, 230, 14, 14),
                             ),
                           ),
                         ],
@@ -288,7 +288,7 @@ class _EditarUsuarioState extends State<EditarUsuario> {
                             widget.user.getNacimiento!,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue,
+                              color: const Color.fromARGB(255, 230, 14, 14),
                             ),
                           ),
                         ],
@@ -330,7 +330,7 @@ class _EditarUsuarioState extends State<EditarUsuario> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(300, 40),
-                  backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+                  backgroundColor: const Color.fromARGB(255, 230, 14, 14),
                 ),
                 onPressed: _guardar,
                 child: const Text(
@@ -342,12 +342,14 @@ class _EditarUsuarioState extends State<EditarUsuario> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(300, 40),
-                  backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+                  backgroundColor: const Color.fromARGB(255, 230, 14, 14),
                 ),
                 onPressed: () => Navigator.pop(context),
                 child: const Text(
                   "Cancelar",
-                  style: TextStyle(color: Colors.blue),
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 230, 14, 14),
+                  ),
                 ),
               ),
             ],

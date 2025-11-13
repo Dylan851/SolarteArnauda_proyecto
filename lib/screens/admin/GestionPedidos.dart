@@ -8,7 +8,7 @@ class GestionPedidos extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gestión de Pedidos'),
-        backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
+        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
       ),
       body: const Center(child: Text('Aquí irá la gestión de pedidos.')),
     );

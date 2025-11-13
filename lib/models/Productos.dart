@@ -4,6 +4,7 @@ class Productos {
   double precio;
   String? imagenProducto;
   bool disponible;
+  int cantidad;
 
   Productos({
     required this.nombre,
@@ -11,6 +12,7 @@ class Productos {
     required this.precio,
     required this.imagenProducto,
     this.disponible = true,
+    this.cantidad = 0,
   });
 
   String get getNombre => nombre;
@@ -18,6 +20,7 @@ class Productos {
   double get getPrecio => precio;
   String? get getImagenProducto => imagenProducto;
   bool get getDisponible => disponible;
+  int get getCantidad => cantidad;
 
   // Setters para la edición
   set setNombre(String value) => nombre = value;
@@ -25,4 +28,5 @@ class Productos {
   set setPrecio(double value) => precio = value;
   set setImagenProducto(String? value) => imagenProducto = value;
   set setDisponible(bool value) => disponible = value;
+  set setCantidad(int value) => cantidad = value;
 }

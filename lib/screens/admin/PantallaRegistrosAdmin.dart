@@ -178,7 +178,7 @@ class _PantallaRegistrosAdminState extends State<PantallaRegistrosAdmin> {
                 const SizedBox(width: 16),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.camera_alt),
-                  label: const Text("Cámara"),
+                  label: const Text("Camara"),
                   onPressed: () async {
                     final path = await CameraGalleryService().takePhoto();
                     if (path == null) return;
@@ -251,7 +251,10 @@ class _PantallaRegistrosAdminState extends State<PantallaRegistrosAdmin> {
                 backgroundColor: const Color.fromARGB(255, 187, 228, 247),
               ),
               onPressed: _cancelar,
-              child: Text("Cancelar", style: TextStyle(color: Colors.blue)),
+              child: Text(
+                "Cancelar",
+                style: TextStyle(color: const Color.fromARGB(255, 230, 14, 14)),
+              ),
             ),
           ],
         ),

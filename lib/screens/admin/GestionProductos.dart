@@ -58,7 +58,7 @@ class _GestionProductosState extends State<GestionProductos> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gestión de Productos'),
-        backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
+        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -86,7 +86,6 @@ class _GestionProductosState extends State<GestionProductos> {
                                               ),
                                     )
                                   : Image.network(
-                                      // 👈 reemplazo seguro para web/móvil
                                       producto.getImagenProducto!,
                                       fit: BoxFit.cover,
                                       errorBuilder:
@@ -115,7 +114,10 @@ class _GestionProductosState extends State<GestionProductos> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            icon: const Icon(
+                              Icons.edit,
+                              color: const Color.fromARGB(255, 230, 14, 14),
+                            ),
                             onPressed: () async {
                               final result = await Navigator.push(
                                 context,
@@ -208,7 +210,10 @@ class _GestionProductosState extends State<GestionProductos> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(color: Colors.blue, width: 1.5),
+                side: const BorderSide(
+                  color: const Color.fromARGB(255, 230, 14, 14),
+                  width: 1.5,
+                ),
               ),
               onPressed: _crearProducto,
               child: const Text('Crear Producto'),
@@ -217,7 +222,10 @@ class _GestionProductosState extends State<GestionProductos> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(color: Colors.blue, width: 1.5),
+                side: const BorderSide(
+                  color: const Color.fromARGB(255, 230, 14, 14),
+                  width: 1.5,
+                ),
               ),
               onPressed: () => Navigator.pop(context),
               child: const Text('Volver'),
