@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/controllers/LoginProductos.dart';
+import 'package:flutter_application/screens/cliente/contactoCliente.dart';
 import 'package:flutter_application/screens/cliente/editarUsuarioCliente.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
 
@@ -27,6 +28,95 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
       }
     });
     return total;
+  }
+
+  void _realizarCompra() {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Compra realizada con éxito")));
+  }
+
+  void _mostrarResumenCompra(List productos) {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // Permite cerrar el dialog tocando fuera de él
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          elevation: 16,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Resumen de compra",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+
+                // 🛒 LISTA DE PRODUCTOS SELECCIONADOS
+                ...cantidades.entries.where((e) => e.value > 0).map((e) {
+                  final producto = productos[e.key];
+
+                  return ListTile(
+                    leading: Image.asset(
+                      producto['imagenProducto'],
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                    ),
+                    title: Text(producto['nombre']),
+                    subtitle: Text("Cantidad: ${e.value}"),
+                    trailing: Text(
+                      "\$${(producto['precio'] * e.value).toStringAsFixed(2)}",
+                    ),
+                  );
+                }).toList(),
+
+                const Divider(),
+
+                // 🔢 TOTAL
+                Text(
+                  "Total: \$${_calcularTotal(productos).toStringAsFixed(2)}",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // 🔘 BOTÓN FINAL DE COMPRA
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Cerrar el diálogo
+                    _realizarCompra();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Appcolor.backgroundColor,
+                    minimumSize: const Size(double.infinity, 45),
+                  ),
+                  child: const Text(
+                    "Realizar compra",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _contactoCliente() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => contactoCliente()),
+    );
   }
 
   void _editarUsuarioCliente() {
@@ -203,7 +293,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                         padding: const EdgeInsets.symmetric(horizontal: 00.0),
                         child: ElevatedButton.icon(
                           onPressed: () {
-                            // Comprar directamente desde aquí
+                            _mostrarResumenCompra(productos);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Appcolor.backgroundColor,
@@ -249,7 +339,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 300.0),
                   child: ElevatedButton(
-                    onPressed: null,
+                    onPressed: _contactoCliente,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
