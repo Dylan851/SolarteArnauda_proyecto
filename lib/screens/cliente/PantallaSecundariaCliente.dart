@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/controllers/LoginProductos.dart';
-import 'package:flutter_application/screens/admin/EditarUsuario.dart';
 import 'package:flutter_application/screens/cliente/editarUsuarioCliente.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
 
