@@ -1,17 +1,19 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/Camera.dart';
-import 'package:flutter_application/controllers/LoginController.dart';
-import 'package:flutter_application/screens/PantallaPrincipal.dart';
+import 'package:flutter_application/models/User.dart';
+import 'package:flutter_application/screens/PantallaRegistros.dart';
+import 'package:flutter_application/services/LogicaUsuarios.dart';
 
-enum Genero { Sr, Sra }
+class EditarUsuarioCliente extends StatefulWidget {
+  final User user;
 
-class editarUsuarioCliente extends StatefulWidget {
-  const editarUsuarioCliente({super.key});
+  const EditarUsuarioCliente({super.key, required this.user});
 
   @override
-  State<editarUsuarioCliente> createState() => _editarUsuarioClienteState();
+  State<EditarUsuarioCliente> createState() => _EditarUsuarioClienteState();
 }
 
 const List<String> _listaLugares = <String>[
@@ -22,39 +24,63 @@ const List<String> _listaLugares = <String>[
   "Alicante",
 ];
 
-class _editarUsuarioClienteState extends State<editarUsuarioCliente> {
-  Genero? _generoSelecionado = Genero.Sr;
-  String _nombre = "";
-  String _contrasena = "";
-  String _repiteContrasena = "";
-  int? _edad;
+class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
+  late Genero? _generoSelecionado;
+  late TextEditingController _nombreController;
+  late TextEditingController _contrasenaController;
+  late TextEditingController _repiteContrasenaController;
+  late TextEditingController _edadController;
   String? photoPath;
   String? _lugarNacimiento;
-  bool _aceptaTerminos = false;
-  void _aceptar() {
-    if (_nombre.isNotEmpty &&
-        _contrasena.isNotEmpty &&
-        _repiteContrasena.isNotEmpty) {
-      if (_contrasena == _repiteContrasena) {
-        if (_aceptaTerminos == true) {
-          loginController.newUsuario(
-            _generoSelecionado,
-            _nombre,
-            _contrasena,
-            _edad,
-            photoPath,
-            _lugarNacimiento,
-          );
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PantallaPrincipal()),
-          );
-        } else {
-          const snackBar = SnackBar(
-            content: Text("Acepta terminos y condiciones"),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
+  late bool _esAdmin;
+  bool _ocultarContrasena = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializar con los datos del usuario
+    _generoSelecionado = widget.user.getGenero;
+    _nombreController = TextEditingController(text: widget.user.getName);
+    _contrasenaController = TextEditingController(
+      text: widget.user.getPassword,
+    );
+    _repiteContrasenaController = TextEditingController(
+      text: widget.user.getPassword,
+    );
+    _edadController = TextEditingController(
+      text: widget.user.getEdad?.toString() ?? '',
+    );
+    photoPath = widget.user.getPhotoPath;
+    _lugarNacimiento = widget.user.getNacimiento;
+    _esAdmin = widget.user.getIsAdmin == true;
+  }
+
+  @override
+  void dispose() {
+    _nombreController.dispose();
+    _contrasenaController.dispose();
+    _repiteContrasenaController.dispose();
+    _edadController.dispose();
+    super.dispose();
+  }
+
+  void _guardar() {
+    if (_nombreController.text.isNotEmpty &&
+        _contrasenaController.text.isNotEmpty &&
+        _repiteContrasenaController.text.isNotEmpty) {
+      if (_contrasenaController.text == _repiteContrasenaController.text) {
+        // Actualizar el usuario
+        LogicaUsuarios.actualizarUsuario(
+          widget.user.getName,
+          _generoSelecionado,
+          _nombreController.text,
+          _contrasenaController.text,
+          int.tryParse(_edadController.text),
+          photoPath,
+          _lugarNacimiento,
+          _esAdmin,
+        );
+        Navigator.pop(context, true); // true indica que se realizaron cambios
       } else {
         const snackBar = SnackBar(
           content: Text("Las contraseñas no son iguales"),
@@ -63,195 +89,257 @@ class _editarUsuarioClienteState extends State<editarUsuarioCliente> {
       }
     } else {
       const snackBar = SnackBar(
-        content: Text("Campos vacios en nombre y contraseña"),
+        content: Text("Campos vacíos en nombre y contraseña"),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-  }
-
-  void _cancelar() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const PantallaPrincipal()),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(61, 180, 228, 1),
-        title: Text("Registro"),
+        backgroundColor: Appcolor.backgroundColor,
+        title: const Text("Editar Usuario"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Text("Tratamiento: "),
-                SizedBox(width: 20),
-                Radio<Genero>(
-                  value: Genero.Sr,
-                  groupValue: _generoSelecionado,
-                  onChanged: (Genero? value) {
-                    setState(() {
-                      _generoSelecionado = value;
-                    });
-                  },
-                ),
-                const Text(" Sr."),
-                SizedBox(width: 20),
-                Radio<Genero>(
-                  value: Genero.Sra,
-                  groupValue: _generoSelecionado,
-                  onChanged: (Genero? value) {
-                    setState(() {
-                      _generoSelecionado = value;
-                    });
-                  },
-                ),
-                const Text(" Sra."),
-              ],
-            ),
-            SizedBox(height: 20),
-            Column(
-              children: [
-                SizedBox(
-                  child: TextFormField(
-                    decoration: InputDecoration(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text("Tratamiento actual: "),
+                      Text(
+                        _generoSelecionado == Genero.Sr ? "Sr." : "Sra.",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: const Color.fromARGB(255, 230, 14, 14),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Text("Cambiar a: "),
+                      const SizedBox(width: 20),
+                      Radio<Genero>(
+                        value: Genero.Sr,
+                        groupValue: _generoSelecionado,
+                        onChanged: (Genero? value) {
+                          setState(() {
+                            _generoSelecionado = value;
+                          });
+                        },
+                      ),
+                      const Text(" Sr."),
+                      const SizedBox(width: 20),
+                      Radio<Genero>(
+                        value: Genero.Sra,
+                        groupValue: _generoSelecionado,
+                        onChanged: (Genero? value) {
+                          setState(() {
+                            _generoSelecionado = value;
+                          });
+                        },
+                      ),
+                      const Text(" Sra."),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                children: [
+                  TextFormField(
+                    controller: _nombreController,
+                    decoration: const InputDecoration(
                       labelText: "Nombre",
                       border: OutlineInputBorder(),
                     ),
-                    onChanged: (value) {
-                      _nombre = value;
-                    },
                   ),
-                ),
-                SizedBox(height: 10),
-                SizedBox(
-                  child: TextFormField(
-                    obscureText: true,
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: _contrasenaController,
+                    obscureText: _ocultarContrasena,
                     decoration: InputDecoration(
                       labelText: "Contraseña",
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _ocultarContrasena
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _ocultarContrasena = !_ocultarContrasena;
+                          });
+                        },
+                      ),
                     ),
-                    onChanged: (value) => _contrasena = value,
                   ),
-                ),
-                SizedBox(height: 10),
-                SizedBox(
-                  child: TextFormField(
-                    obscureText: true,
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: _repiteContrasenaController,
+                    obscureText: _ocultarContrasena,
                     decoration: InputDecoration(
                       labelText: "Repite Contraseña",
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _ocultarContrasena
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _ocultarContrasena = !_ocultarContrasena;
+                          });
+                        },
+                      ),
                     ),
-                    onChanged: (value) => _repiteContrasena = value,
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Text("Cargar imagen:"),
-                photoPath != null
-                    ? Image(
-                        image: FileImage(File(photoPath!)),
-                        fit: BoxFit.fill,
-                      )
-                    : Container(),
-                SizedBox(width: 20),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.image),
-                  label: const Text("Galería"),
-                  onPressed: () async {
-                    final path = await CameraGalleryService().selectPhoto();
-                    if (path == null) return;
-                    setState(() {
-                      photoPath = path;
-                    });
-                  },
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.camera_alt),
-                  label: const Text("Cámara"),
-                  onPressed: () async {
-                    final path = await CameraGalleryService().takePhoto();
-                    if (path == null) return;
-                    setState(() {
-                      photoPath = path;
-                    });
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            SizedBox(
-              child: TextField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: "Edad",
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  _edad = int.tryParse(value);
-                },
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                ],
               ),
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              child: DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: "Lugar de nacimiento",
-                  border: OutlineInputBorder(),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  const Text("Cargar imagen:"),
+                  if (photoPath != null)
+                    SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: Image.file(File(photoPath!), fit: BoxFit.cover),
+                    ),
+                  const SizedBox(width: 20),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.image),
+                    label: const Text("Galería"),
+                    onPressed: () async {
+                      final path = await CameraGalleryService().selectPhoto();
+                      if (path == null) return;
+                      setState(() {
+                        photoPath = path;
+                      });
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.camera_alt),
+                    label: const Text("Cámara"),
+                    onPressed: () async {
+                      final path = await CameraGalleryService().takePhoto();
+                      if (path == null) return;
+                      setState(() {
+                        photoPath = path;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.user.getEdad != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        children: [
+                          const Text("Edad actual: "),
+                          Text(
+                            "${widget.user.getEdad} años",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Appcolor.backgroundColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  TextFormField(
+                    controller: _edadController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: widget.user.getEdad == null
+                          ? "Edad"
+                          : "Nueva edad",
+                      border: const OutlineInputBorder(),
+                    ),
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.user.getNacimiento != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        children: [
+                          const Text("Lugar de nacimiento actual: "),
+                          Text(
+                            widget.user.getNacimiento!,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Appcolor.backgroundColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: widget.user.getNacimiento == null
+                          ? "Lugar de nacimiento"
+                          : "Nuevo lugar de nacimiento",
+                      border: const OutlineInputBorder(),
+                    ),
+                    value: _lugarNacimiento,
+                    items: _listaLugares.map((String lugar) {
+                      return DropdownMenuItem(value: lugar, child: Text(lugar));
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _lugarNacimiento = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(300, 40),
+                  backgroundColor: Appcolor.backgroundColor,
                 ),
-                value: _lugarNacimiento,
-                items: _listaLugares.map((String lugar) {
-                  return DropdownMenuItem(value: lugar, child: Text(lugar));
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _lugarNacimiento = value;
-                  });
-                },
-              ),
-            ),
-            Row(
-              children: [
-                const Text("Acepto los terminos y condiciones"),
-                Checkbox(
-                  value: _aceptaTerminos,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _aceptaTerminos = value ?? true;
-                    });
-                  },
+                onPressed: _guardar,
+                child: const Text(
+                  "Guardar",
+                  style: TextStyle(color: Colors.white),
                 ),
-              ],
-            ),
-            SizedBox(height: 15),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 187, 228, 247),
               ),
-              onPressed: _aceptar,
-              child: Text("Aceptar", style: TextStyle(color: Colors.blue)),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(300, 40),
+                  backgroundColor: Appcolor.backgroundColor,
+                ),
+                onPressed: () => Navigator.pop(context),
+                child: const Text(
+                  "Cancelar",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-              onPressed: _cancelar,
-              child: Text("Cancelar", style: TextStyle(color: Colors.blue)),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

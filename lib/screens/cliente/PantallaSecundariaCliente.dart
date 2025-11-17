@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/controllers/LoginProductos.dart';
+import 'package:flutter_application/screens/admin/EditarUsuario.dart';
+import 'package:flutter_application/screens/cliente/editarUsuarioCliente.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
 
 class PantallaSecundaria extends StatefulWidget {
@@ -26,6 +28,15 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
       }
     });
     return total;
+  }
+
+  void _editarUsuarioCliente() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditarUsuarioCliente(user: usuarioActual!),
+      ),
+    );
   }
 
   @override
@@ -254,7 +265,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 300.0),
                   child: ElevatedButton(
-                    onPressed: null,
+                    onPressed: _editarUsuarioCliente,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
