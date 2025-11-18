@@ -4,6 +4,7 @@ import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/controllers/LoginPedido.dart';
 import 'package:flutter_application/controllers/LoginProductos.dart';
 import 'package:flutter_application/models/Pedido.dart';
+import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/screens/cliente/contactoCliente.dart';
 import 'package:flutter_application/screens/cliente/editarUsuarioCliente.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
@@ -90,8 +91,6 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
-
-                // 🛒 LISTA DE PRODUCTOS SELECCIONADOS
                 ...cantidades.entries.where((e) => e.value > 0).map((e) {
                   final producto = productos[e.key];
 
@@ -111,8 +110,6 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                 }).toList(),
 
                 const Divider(),
-
-                // 🔢 TOTAL
                 Text(
                   "Total: \$${_calcularTotal(productos).toStringAsFixed(2)}",
                   style: const TextStyle(
@@ -122,11 +119,9 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                 ),
 
                 const SizedBox(height: 20),
-
-                // 🔘 BOTÓN FINAL DE COMPRA
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context); // Cerrar el diálogo
+                    Navigator.pop(context);
                     _realizarCompra(productos);
                   },
                   style: ElevatedButton.styleFrom(
@@ -149,17 +144,25 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
   void _contactoCliente() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => contactoCliente()),
+      MaterialPageRoute(
+        builder: (context) => contactoCliente(user: usuarioActual!),
+      ),
     );
   }
 
-  void _editarUsuarioCliente() {
-    Navigator.push(
+  void _editarUsuarioCliente() async {
+    final updatedUser = await Navigator.push<User>(
       context,
       MaterialPageRoute(
         builder: (context) => EditarUsuarioCliente(user: usuarioActual!),
       ),
     );
+    if (updatedUser != null) {
+      // Si se recibieron datos actualizados, actualizamos el estado
+      setState(() {
+        usuarioActual = updatedUser;
+      });
+    }
   }
 
   @override

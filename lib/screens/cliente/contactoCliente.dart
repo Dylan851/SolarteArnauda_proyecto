@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/globals.dart';
+import 'package:flutter_application/models/User.dart';
 
 class contactoCliente extends StatelessWidget {
-  const contactoCliente({super.key});
+  final User user;
+  const contactoCliente({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +13,7 @@ class contactoCliente extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Appcolor.backgroundColor,
         title: Text("Contacto Cliente"),
       ),
       body: Padding(
@@ -29,24 +32,24 @@ class contactoCliente extends StatelessWidget {
 
             // NOMBRE DEL USUARIO
             Text(
-              usuario?.name ?? 'No logueado',
+              user.getName,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             SizedBox(height: 20),
 
             // DATOS DEL USUARIO EN UNA COLUMNA
-            infoItem("Contraseña:", usuario?.password ?? "No logueado"),
+            infoItem("Contraseña:", user.getPassword),
             infoItem(
               "Género:",
-              usuario?.genero != null
+              user.getGenero != null
                   ? usuario!.genero.toString().split('.').last
                   : "No hay datos",
             ),
-            infoItem("Edad:", usuario?.edad?.toString() ?? "No hay datos"),
+            infoItem("Edad:", user.getEdad.toString()),
             infoItem(
               "Lugar de nacimiento:",
-              usuario?.nacimiento ?? "No hay datos",
+              user.getNacimiento ?? "No hay datos",
             ),
 
             SizedBox(height: 40),

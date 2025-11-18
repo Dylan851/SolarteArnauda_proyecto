@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/Camera.dart';
+import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:flutter_application/services/LogicaUsuarios.dart';
@@ -52,7 +53,6 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
     );
     photoPath = widget.user.getPhotoPath;
     _lugarNacimiento = widget.user.getNacimiento;
-    _esAdmin = widget.user.getIsAdmin == true;
   }
 
   @override
@@ -80,7 +80,8 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
           _lugarNacimiento,
           _esAdmin,
         );
-        Navigator.pop(context, true); // true indica que se realizaron cambios
+        // Devolver los datos actualizados a la pantalla anterior (ContactoCliente)
+        Navigator.pop(context);
       } else {
         const snackBar = SnackBar(
           content: Text("Las contraseñas no son iguales"),
