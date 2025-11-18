@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/globals.dart';
+import 'package:flutter_application/controllers/LoginPedido.dart';
 import 'package:flutter_application/controllers/LoginProductos.dart';
+import 'package:flutter_application/models/Pedido.dart';
 import 'package:flutter_application/screens/cliente/contactoCliente.dart';
 import 'package:flutter_application/screens/cliente/editarUsuarioCliente.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
@@ -30,10 +32,42 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
     return total;
   }
 
-  void _realizarCompra() {
+  void _realizarCompra(List productos) {
+    // Crear lista de productos seleccionados
+    List<Map<String, dynamic>> productosPedido = [];
+
+    cantidades.forEach((index, cant) {
+      if (cant > 0 && productos[index]['disponible'] == true) {
+        productosPedido.add({
+          "nombre": productos[index]['nombre'],
+          "cantidad": cant,
+          "precio": productos[index]['precio'],
+        });
+      }
+    });
+
+    double total = _calcularTotal(productos);
+
+    // Crear pedido
+    final nuevoPedido = Pedido(
+      id: DateTime.now().minute, // ID único del pedido
+      Usuario: usuarioActual!.name,
+      productos: productosPedido,
+      total: total,
+      fecha: DateTime.now(),
+    );
+
+    // Guardarlo
+    ControladorPedidos.agregarPedido(nuevoPedido);
+
+    // Limpiar cantidades
+    setState(() {
+      cantidades.clear();
+    });
+
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text("Compra realizada con éxito")));
+    ).showSnackBar(SnackBar(content: Text("Pedido realizado con éxito")));
   }
 
   void _mostrarResumenCompra(List productos) {
@@ -93,7 +127,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context); // Cerrar el diálogo
-                    _realizarCompra();
+                    _realizarCompra(productos);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Appcolor.backgroundColor,
@@ -324,11 +358,121 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
           ),
         ),
         Card(
-          child: Center(
-            child: Text(
-              'Página de Pedidos',
-              style: theme.textTheme.headlineMedium,
-            ),
+          child: FutureBuilder(
+            future: Future.delayed(Duration(milliseconds: 200), () {
+              return ControladorPedidos.obtenerPedidosDeUsuario(
+                usuarioActual!.name,
+              );
+            }),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              final pedidos = snapshot.data as List<Pedido>;
+
+              if (pedidos.isEmpty) {
+                return Center(
+                  child: Text(
+                    "No tienes pedidos aún",
+                    style: theme.textTheme.headlineMedium,
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                padding: EdgeInsets.all(20),
+                itemCount: pedidos.length,
+                itemBuilder: (context, index) {
+                  final pedido = pedidos[index];
+
+                  Color colorEstado;
+                  String textoEstado;
+
+                  switch (pedido.estado) {
+                    case "enviado":
+                      colorEstado = Colors.green;
+                      textoEstado = "Enviado";
+                      break;
+                    case "denegado":
+                      colorEstado = Colors.red;
+                      textoEstado = "Denegado";
+                      break;
+                    default:
+                      colorEstado = Colors.orange;
+                      textoEstado = "En trámite";
+                  }
+
+                  return Card(
+                    margin: EdgeInsets.only(bottom: 15),
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Pedido #${pedido.id}",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          SizedBox(height: 10),
+
+                          ...pedido.productos.map((prod) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("${prod['cantidad']} x ${prod['nombre']}"),
+                                Text(
+                                  "\$${(prod['cantidad'] * prod['precio']).toStringAsFixed(2)}",
+                                ),
+                              ],
+                            );
+                          }),
+
+                          Divider(),
+
+                          Text(
+                            "Total: \$${pedido.total.toStringAsFixed(2)}",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+
+                          SizedBox(height: 10),
+
+                          Row(
+                            children: [
+                              Text(
+                                "Estado: ",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                textoEstado,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: colorEstado,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 5),
+                          Text(
+                            "Fecha: ${pedido.fecha.toLocal()}",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           ),
         ),
         Card(
