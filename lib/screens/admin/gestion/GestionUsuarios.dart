@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/screens/admin/EditarUsuario.dart';
+import 'package:flutter_application/screens/admin/editarInformacionAdmin/EditarUsuario.dart';
 import 'package:flutter_application/screens/admin/PantallaRegistrosAdmin.dart';
 import 'package:flutter_application/services/LogicaUsuarios.dart';
 

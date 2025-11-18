@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/models/Productos.dart';
-import 'package:flutter_application/screens/admin/EditarProducto.dart';
+import 'package:flutter_application/screens/admin/editarInformacionAdmin/EditarProducto.dart';
 import 'package:flutter_application/services/LogicaProductos.dart';
 
 class GestionProductos extends StatefulWidget {
