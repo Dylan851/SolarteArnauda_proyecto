@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/screens/admin/GestionUsuarios.dart';
-import 'package:flutter_application/screens/admin/GestionPedidos.dart';
-import 'package:flutter_application/screens/admin/GestionProductos.dart';
-import 'package:flutter_application/screens/admin/GestionInventario.dart';
+import 'package:flutter_application/screens/admin/gestion/GestionUsuarios.dart';
+import 'package:flutter_application/screens/admin/gestion/GestionPedidos.dart';
+import 'package:flutter_application/screens/admin/gestion/GestionProductos.dart';
+import 'package:flutter_application/screens/admin/gestion/GestionInventario.dart';
 
 class AdminHome extends StatelessWidget {
   const AdminHome({super.key});
