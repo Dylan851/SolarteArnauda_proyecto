@@ -19,13 +19,11 @@ class PantallaSecundaria extends StatefulWidget {
 class _PantallaSecundariaState extends State<PantallaSecundaria> {
   int currentPageIndex = 0;
 
-  // Mapa que guarda la cantidad seleccionada por cada producto
   Map<int, int> cantidades = {};
 
   double _calcularTotal(List productos) {
     double total = 0;
     cantidades.forEach((index, cantidad) {
-      // Solo calcular el total para productos disponibles
       if (productos[index]['disponible'] == true) {
         total += productos[index]['precio'] * cantidad;
       }
@@ -34,7 +32,6 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
   }
 
   void _realizarCompra(List productos) {
-    // Crear lista de productos seleccionados
     List<Map<String, dynamic>> productosPedido = [];
 
     cantidades.forEach((index, cant) {
@@ -49,19 +46,17 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
 
     double total = _calcularTotal(productos);
 
-    // Crear pedido
     final nuevoPedido = Pedido(
-      id: DateTime.now().minute, // ID único del pedido
+      id: DateTime.now().microsecondsSinceEpoch,
       Usuario: usuarioActual!.name,
       productos: productosPedido,
       total: total,
       fecha: DateTime.now(),
     );
 
-    // Guardarlo
-    ControladorPedidos.agregarPedido(nuevoPedido);
+    // AHORA → LogicaPedidos
+    LogicaPedidos.agregarPedido(nuevoPedido);
 
-    // Limpiar cantidades
     setState(() {
       cantidades.clear();
     });
@@ -74,7 +69,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
   void _mostrarResumenCompra(List productos) {
     showDialog(
       context: context,
-      barrierDismissible: true, // Permite cerrar el dialog tocando fuera de él
+      barrierDismissible: true,
       builder: (context) {
         return Dialog(
           shape: RoundedRectangleBorder(
@@ -91,15 +86,14 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
+
                 ...cantidades.entries.where((e) => e.value > 0).map((e) {
                   final producto = productos[e.key];
-
                   return ListTile(
                     leading: Image.asset(
                       producto['imagenProducto'],
                       width: 40,
                       height: 40,
-                      fit: BoxFit.cover,
                     ),
                     title: Text(producto['nombre']),
                     subtitle: Text("Cantidad: ${e.value}"),
@@ -107,7 +101,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
                       "\$${(producto['precio'] * e.value).toStringAsFixed(2)}",
                     ),
                   );
-                }).toList(),
+                }),
 
                 const Divider(),
                 Text(
@@ -158,7 +152,6 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
       ),
     );
     if (updatedUser != null) {
-      // Si se recibieron datos actualizados, actualizamos el estado
       setState(() {
         usuarioActual = updatedUser;
       });
@@ -167,16 +160,13 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     final productos = LoginProductos.recorrerProductos();
 
     return Scaffold(
       bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
+        onDestinationSelected: (index) =>
+            setState(() => currentPageIndex = index),
         indicatorColor: Appcolor.backgroundColor,
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
@@ -196,327 +186,311 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
           ),
         ],
       ),
+
       drawer: drawerGeneral(),
+
       appBar: AppBar(
         backgroundColor: Appcolor.backgroundColor,
-        title: Text(
-          "Bienvenido ${usuarioActual?.name}",
-          style: TextStyle(fontWeight: FontWeight.w400),
-        ),
+        title: Text("Bienvenido ${usuarioActual?.name}"),
       ),
+
       body: <Widget>[
-        Card(
-          child: SizedBox.expand(
-            child: Column(
-              children: [
-                // 🔹 Lista de productos
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(40.0),
-                    child: ListView.builder(
-                      itemCount: productos.length,
-                      itemBuilder: (context, index) {
-                        final producto = productos[index];
-                        // Solo mostrar productos disponibles
-                        if (producto['disponible'] != true) {
-                          return const SizedBox.shrink(); // No mostrar productos no disponibles
-                        }
-                        final cantidad = cantidades[index] ?? 0;
+        // ----- PÁGINA DE PRODUCTOS -----
+        _buildProductosPage(productos),
 
-                        return Card(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 6,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Row(
-                              children: [
-                                // Imagen del producto
-                                Image.asset(
-                                  producto['imagenProducto'],
-                                  width: 70,
-                                  height: 70,
-                                  fit: BoxFit.cover,
-                                ),
-                                const SizedBox(width: 10),
+        // ----- PÁGINA DE PEDIDOS -----
+        _buildPedidosPage(theme),
 
-                                // Información del producto
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        producto['nombre'],
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        producto['descripcion'],
-                                        style: const TextStyle(fontSize: 13),
-                                      ),
-                                      Text(
-                                        '\$${producto['precio'].toStringAsFixed(2)}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.green,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+        // ----- PÁGINA DE USUARIO -----
+        _buildPerfilPage(),
+      ][currentPageIndex],
+    );
+  }
+
+  // ------------------------------------------------------------
+  // PÁGINA 1: PRODUCTOS
+  // ------------------------------------------------------------
+  Widget _buildProductosPage(List productos) {
+    return Card(
+      child: SizedBox.expand(
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(40.0),
+                child: ListView.builder(
+                  itemCount: productos.length,
+                  itemBuilder: (context, index) {
+                    final producto = productos[index];
+                    if (producto['disponible'] != true)
+                      return SizedBox.shrink();
+
+                    final cantidad = cantidades[index] ?? 0;
+
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              producto['imagenProducto'],
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                            ),
+
+                            const SizedBox(width: 10),
+
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    producto['nombre'],
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
+                                  Text(producto['descripcion']),
+                                  Text(
+                                    '\$${producto['precio'].toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
 
-                                // Botones de + y -
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.remove_circle_outline,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          if (cantidad > 0) {
-                                            cantidades[index] = cantidad - 1;
-                                          }
-                                        });
-                                      },
-                                    ),
-                                    Text(
-                                      '$cantidad',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.add_circle_outline,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          cantidades[index] = cantidad + 1;
-                                        });
-                                      },
-                                    ),
-                                  ],
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.remove_circle_outline),
+                                  onPressed: () {
+                                    if (cantidad > 0) {
+                                      setState(() {
+                                        cantidades[index] = cantidad - 1;
+                                      });
+                                    }
+                                  },
+                                ),
+                                Text('$cantidad'),
+                                IconButton(
+                                  icon: Icon(Icons.add_circle_outline),
+                                  onPressed: () {
+                                    setState(() {
+                                      cantidades[index] = cantidad + 1;
+                                    });
+                                  },
                                 ),
                               ],
                             ),
-                          ),
-                        );
-                      },
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    'Total: \$${_calcularTotal(productos).toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 10),
 
-                // 🔹 Botón fijo al final
-                Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.all(16),
+                  ElevatedButton.icon(
+                    onPressed: () => _mostrarResumenCompra(productos),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Appcolor.backgroundColor,
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    icon: Icon(Icons.shopping_cart, color: Colors.black),
+                    label: Text(
+                      'Resumen de compra',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ------------------------------------------------------------
+  // PÁGINA 2: MIS PEDIDOS
+  // ------------------------------------------------------------
+  Widget _buildPedidosPage(ThemeData theme) {
+    return Card(
+      child: FutureBuilder(
+        future: Future.delayed(
+          Duration(milliseconds: 200),
+          () => LogicaPedidos.obtenerPedidosDeUsuario(usuarioActual!.name),
+        ),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
+
+          final pedidos = snapshot.data as List<Pedido>;
+
+          if (pedidos.isEmpty) {
+            return Center(
+              child: Text(
+                "No tienes pedidos aún",
+                style: theme.textTheme.headlineMedium,
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: EdgeInsets.all(20),
+            itemCount: pedidos.length,
+            itemBuilder: (context, index) {
+              final pedido = pedidos[index];
+
+              Color colorEstado;
+              String txtEstado;
+
+              switch (pedido.estado) {
+                case "enviado":
+                  colorEstado = Colors.green;
+                  txtEstado = "Enviado";
+                  break;
+                case "denegado":
+                  colorEstado = Colors.red;
+                  txtEstado = "Denegado";
+                  break;
+                default:
+                  colorEstado = Colors.orange;
+                  txtEstado = "En trámite";
+              }
+
+              return Card(
+                margin: EdgeInsets.only(bottom: 15),
+                child: Padding(
+                  padding: EdgeInsets.all(15),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Total: \$${_calcularTotal(productos).toStringAsFixed(2)}',
-                        style: const TextStyle(
+                        "Pedido #${pedido.id}",
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 10),
 
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 00.0),
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            _mostrarResumenCompra(productos);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Appcolor.backgroundColor,
-                            minimumSize: const Size(double.infinity, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                      SizedBox(height: 10),
+
+                      ...pedido.productos.map((prod) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("${prod['cantidad']} x ${prod['nombre']}"),
+                            Text(
+                              "\$${(prod['cantidad'] * prod['precio']).toStringAsFixed(2)}",
                             ),
+                          ],
+                        );
+                      }),
+
+                      Divider(),
+
+                      Text(
+                        "Total: \$${pedido.total.toStringAsFixed(2)}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+
+                      SizedBox(height: 10),
+
+                      Row(
+                        children: [
+                          Text(
+                            "Estado: ",
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          icon: const Icon(
-                            Icons.shopping_cart,
-                            color: Colors.black,
-                          ),
-                          label: const Text(
-                            'Resumen de compra',
+                          Text(
+                            txtEstado,
                             style: TextStyle(
-                              fontSize: 16,
+                              color: colorEstado,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black,
                             ),
                           ),
-                        ),
+                        ],
+                      ),
+
+                      SizedBox(height: 5),
+                      Text(
+                        "Fecha: ${pedido.fecha.toLocal()}",
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-        Card(
-          child: FutureBuilder(
-            future: Future.delayed(Duration(milliseconds: 200), () {
-              return ControladorPedidos.obtenerPedidosDeUsuario(
-                usuarioActual!.name,
-              );
-            }),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
-
-              final pedidos = snapshot.data as List<Pedido>;
-
-              if (pedidos.isEmpty) {
-                return Center(
-                  child: Text(
-                    "No tienes pedidos aún",
-                    style: theme.textTheme.headlineMedium,
-                  ),
-                );
-              }
-
-              return ListView.builder(
-                padding: EdgeInsets.all(20),
-                itemCount: pedidos.length,
-                itemBuilder: (context, index) {
-                  final pedido = pedidos[index];
-
-                  Color colorEstado;
-                  String textoEstado;
-
-                  switch (pedido.estado) {
-                    case "enviado":
-                      colorEstado = Colors.green;
-                      textoEstado = "Enviado";
-                      break;
-                    case "denegado":
-                      colorEstado = Colors.red;
-                      textoEstado = "Denegado";
-                      break;
-                    default:
-                      colorEstado = Colors.orange;
-                      textoEstado = "En trámite";
-                  }
-
-                  return Card(
-                    margin: EdgeInsets.only(bottom: 15),
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Pedido #${pedido.id}",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          SizedBox(height: 10),
-
-                          ...pedido.productos.map((prod) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("${prod['cantidad']} x ${prod['nombre']}"),
-                                Text(
-                                  "\$${(prod['cantidad'] * prod['precio']).toStringAsFixed(2)}",
-                                ),
-                              ],
-                            );
-                          }),
-
-                          Divider(),
-
-                          Text(
-                            "Total: \$${pedido.total.toStringAsFixed(2)}",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-
-                          SizedBox(height: 10),
-
-                          Row(
-                            children: [
-                              Text(
-                                "Estado: ",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                textoEstado,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: colorEstado,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 5),
-                          Text(
-                            "Fecha: ${pedido.fecha.toLocal()}",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
               );
             },
-          ),
-        ),
-        Card(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 300.0),
-                  child: ElevatedButton(
-                    onPressed: _contactoCliente,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.contact_mail),
-                        SizedBox(width: 10, height: 50),
-                        Text('contacto'),
-                      ],
-                    ),
-                  ),
+          );
+        },
+      ),
+    );
+  }
+
+  // ------------------------------------------------------------
+  // PÁGINA 3: PERFIL USUARIO
+  // ------------------------------------------------------------
+  Widget _buildPerfilPage() {
+    return Card(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 300.0),
+              child: ElevatedButton(
+                onPressed: _contactoCliente,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.contact_mail),
+                    SizedBox(width: 10),
+                    Text('Contacto'),
+                  ],
                 ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 300.0),
-                  child: ElevatedButton(
-                    onPressed: _editarUsuarioCliente,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.person),
-                        SizedBox(width: 10, height: 50),
-                        Text('Editar Usuario'),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 300.0),
+              child: ElevatedButton(
+                onPressed: _editarUsuarioCliente,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.person),
+                    SizedBox(width: 10),
+                    Text('Editar Usuario'),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-      ][currentPageIndex],
+      ),
     );
   }
 }

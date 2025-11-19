@@ -1,25 +1,30 @@
 import 'package:flutter_application/models/Pedido.dart';
 
-class ControladorPedidos {
-  static List<Pedido> pedidos = [];
+class LogicaPedidos {
+  static List<Pedido> _pedidos = [];
 
-  // Método para agregar un nuevo pedido
+  // Agregar pedido
   static void agregarPedido(Pedido pedido) {
-    pedidos.add(pedido);
+    _pedidos.add(pedido);
   }
 
-  // Método para obtener todos los pedidos
+  // Obtener todos los pedidos
   static List<Pedido> obtenerPedidos() {
-    return pedidos;
+    return _pedidos;
   }
 
-  // Método para obtener los pedidos de un usuario
+  // Obtener pedidos de un usuario
   static List<Pedido> obtenerPedidosDeUsuario(String usuario) {
-    return pedidos.where((pedido) => pedido.Usuario == usuario).toList();
+    return _pedidos.where((pedido) => pedido.Usuario == usuario).toList();
   }
 
-  // Método para eliminar un pedido
+  // Eliminar un pedido
   static void eliminarPedido(Pedido pedido) {
-    pedidos.remove(pedido);
+    _pedidos.remove(pedido);
+  }
+
+  // Cambiar estado
+  static void cambiarEstado(Pedido pedido, String nuevoEstado) {
+    pedido.estado = nuevoEstado;
   }
 }

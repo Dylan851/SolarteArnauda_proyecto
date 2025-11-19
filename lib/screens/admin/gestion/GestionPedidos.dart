@@ -1,11 +1,6 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/controllers/LoginPedido.dart';
-import 'package:flutter_application/models/Productos.dart';
 import 'package:flutter_application/models/Pedido.dart';
-import 'package:flutter_application/services/LogicaProductos.dart';
-import 'package:flutter_application/screens/admin/editarInformacionAdmin/EditarProducto.dart';
 
 class GestionPedidos extends StatefulWidget {
   const GestionPedidos({super.key});
@@ -15,7 +10,6 @@ class GestionPedidos extends StatefulWidget {
 }
 
 class _GestionPedidosState extends State<GestionPedidos> {
-  // Lista de pedidos, la cual será cargada desde el controlador
   List<Pedido> pedidos = [];
 
   @override
@@ -24,12 +18,62 @@ class _GestionPedidosState extends State<GestionPedidos> {
     _cargarPedidos();
   }
 
-  // Cargar los pedidos
   void _cargarPedidos() {
     setState(() {
-      pedidos = ControladorPedidos
-          .pedidos; // Obtener todos los pedidos desde el controlador
+      pedidos = LogicaPedidos.obtenerPedidos();
     });
+  }
+
+  void _mostrarCambiarEstado(Pedido pedido) {
+    String estadoActual = pedido.estado;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Cambiar estado del pedido"),
+          content: StatefulBuilder(
+            builder: (context, setStateDialog) {
+              return DropdownButton<String>(
+                value: estadoActual,
+                items: const [
+                  DropdownMenuItem(
+                    value: "en_tramite",
+                    child: Text("En trámite"),
+                  ),
+                  DropdownMenuItem(value: "enviado", child: Text("Enviado")),
+                  DropdownMenuItem(value: "denegado", child: Text("Denegado")),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    setStateDialog(() => estadoActual = value);
+                  }
+                },
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              child: Text("Cancelar"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: Text("Guardar"),
+              onPressed: () {
+                LogicaPedidos.cambiarEstado(pedido, estadoActual);
+
+                setState(() {});
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Estado actualizado a $estadoActual")),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -50,28 +94,25 @@ class _GestionPedidosState extends State<GestionPedidos> {
                   final pedido = pedidos[index];
                   return Card(
                     child: ListTile(
-                      title: Text(
-                        "Pedido #${pedido.getIdPedido} de ${pedido.getId}",
-                      ),
+                      title: Text("Pedido #${pedido.id} de ${pedido.Usuario}"),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Estado: ${pedido.getEstado}"),
-                          Text(
-                            "Total: \$${pedido.getTotal.toStringAsFixed(2)}",
-                          ),
-                          Text("Fecha: ${pedido.getFecha.toLocal()}"),
+                          Text("Estado: ${pedido.estado}"),
+                          Text("Total: \$${pedido.total.toStringAsFixed(2)}"),
+                          Text("Fecha: ${pedido.fecha.toLocal()}"),
                         ],
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          // Cambiar estado
                           IconButton(
-                            icon: const Icon(Icons.info),
-                            onPressed: () {
-                              // Aquí podrías mostrar más detalles del pedido, como los productos
-                            },
+                            icon: const Icon(Icons.info_outline),
+                            onPressed: () => _mostrarCambiarEstado(pedido),
                           ),
+
+                          // Eliminar
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () async {
@@ -80,36 +121,30 @@ class _GestionPedidosState extends State<GestionPedidos> {
                                 builder: (context) => AlertDialog(
                                   title: const Text('Confirmar eliminación'),
                                   content: Text(
-                                    '¿Eliminar el pedido de "${pedido.getId}"?',
+                                    '¿Eliminar el pedido de "${pedido.Usuario}"?',
                                   ),
                                   actions: [
                                     TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
                                       child: const Text('Cancelar'),
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
                                     ),
                                     TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
                                       child: const Text('Eliminar'),
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
                                     ),
                                   ],
                                 ),
                               );
 
                               if (confirm == true) {
-                                // Aquí se podría eliminar el pedido (no implementado en el controlador)
-                                ControladorPedidos.pedidos.remove(pedido);
+                                LogicaPedidos.eliminarPedido(pedido);
                                 _cargarPedidos();
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Pedido de "${pedido.getId}" eliminado',
-                                      ),
-                                    ),
-                                  );
-                                }
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Pedido eliminado')),
+                                );
                               }
                             },
                           ),
@@ -121,27 +156,28 @@ class _GestionPedidosState extends State<GestionPedidos> {
                 },
               ),
             ),
+
             const SizedBox(height: 16),
+
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(
-                  color: const Color.fromARGB(255, 230, 14, 14),
+                side: BorderSide(
+                  color: Color.fromARGB(255, 230, 14, 14),
                   width: 1.5,
                 ),
               ),
-              onPressed: () {
-                // Aquí podrías crear un nuevo pedido (si es necesario)
-                // Navegar a una pantalla para crear pedidos, o hacer alguna acción
-              },
+              onPressed: () {},
               child: const Text('Crear Pedido'),
             ),
+
             const SizedBox(height: 12),
+
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(
-                  color: const Color.fromARGB(255, 230, 14, 14),
+                side: BorderSide(
+                  color: Color.fromARGB(255, 230, 14, 14),
                   width: 1.5,
                 ),
               ),
