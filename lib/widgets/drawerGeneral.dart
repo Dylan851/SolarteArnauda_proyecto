@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
+import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/screens/MiPerfil.dart';
 import 'package:flutter_application/screens/PantallaPrincipal.dart';
 
@@ -35,7 +36,9 @@ class _drawerGeneralState extends State<drawerGeneral> {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Miperfil()),
+                MaterialPageRoute(
+                  builder: (context) => Miperfil(user: usuarioActual!),
+                ),
               );
             },
           ),

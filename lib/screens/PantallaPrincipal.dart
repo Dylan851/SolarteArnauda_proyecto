@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
+import 'package:flutter_application/config/utils/music.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:flutter_application/controllers/LoginController.dart';
 import 'package:flutter_application/screens/cliente/PantallaSecundariaCliente.dart';
@@ -56,6 +57,10 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     }
   }
 
+  void _reproducirAudio() async {
+    await Music.playMusic();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -108,6 +113,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                   backgroundColor: const Color.fromARGB(255, 230, 14, 14),
                 ),
                 onPressed: _validar,
+                onLongPress: _reproducirAudio,
                 child: Text(
                   "Login",
                   style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
@@ -162,7 +168,9 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                           TextButton(
                             onPressed: () {
                               if (usernameController.text.isEmpty) {
-                                print('Por favor, ingrese un nombre de usuario.');
+                                print(
+                                  'Por favor, ingrese un nombre de usuario.',
+                                );
                                 return;
                               } else {
                                 var usuario = loginController.getUsuario(

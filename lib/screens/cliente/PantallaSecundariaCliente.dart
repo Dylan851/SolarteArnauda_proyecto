@@ -26,9 +26,9 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
     CompraController.realizarCompra(productos);
     setState(() {});
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Pedido realizado con éxito")),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("Pedido realizado con éxito")));
   }
 
   void _mostrarResumenCompra(List productos) {
@@ -90,7 +90,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
               label: 'Pedidos',
             ),
             NavigationDestination(
-              icon: Badge(label: Text('2'), child: Icon(Icons.person)),
+              icon: Badge(child: Icon(Icons.person)),
               label: 'Yo',
             ),
           ],
