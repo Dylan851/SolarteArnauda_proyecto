@@ -24,7 +24,7 @@ const List<String> _listaLugares = <String>[
 ];
 
 class _PantallaRegistrosState extends State<PantallaRegistros> {
-  Genero? _generoSelecionado = Genero.Sr;
+  Genero? generoSelecionado = Genero.Sr;
   String _nombre = "";
   String _contrasena = "";
   String _repiteContrasena = "";
@@ -39,7 +39,7 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
       if (_contrasena == _repiteContrasena) {
         if (_aceptaTerminos == true) {
           loginController.newUsuario(
-            _generoSelecionado,
+            generoSelecionado,
             _nombre,
             _contrasena,
             _edad,
@@ -94,10 +94,10 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
                 SizedBox(width: 20),
                 Radio<Genero>(
                   value: Genero.Sr,
-                  groupValue: _generoSelecionado,
+                  groupValue: generoSelecionado,
                   onChanged: (Genero? value) {
                     setState(() {
-                      _generoSelecionado = value;
+                      generoSelecionado = value;
                     });
                   },
                 ),
@@ -105,10 +105,10 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
                 SizedBox(width: 20),
                 Radio<Genero>(
                   value: Genero.Sra,
-                  groupValue: _generoSelecionado,
+                  groupValue: generoSelecionado,
                   onChanged: (Genero? value) {
                     setState(() {
-                      _generoSelecionado = value;
+                      generoSelecionado = value;
                     });
                   },
                 ),
