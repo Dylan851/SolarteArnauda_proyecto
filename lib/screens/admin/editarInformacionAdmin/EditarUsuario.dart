@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/Camera.dart';
 import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
@@ -98,7 +99,7 @@ class _EditarUsuarioState extends State<EditarUsuario> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
+        backgroundColor: Appcolor.backgroundColor,
         title: const Text("Editar Usuario"),
       ),
       body: Padding(
@@ -330,26 +331,24 @@ class _EditarUsuarioState extends State<EditarUsuario> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(300, 40),
-                  backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                  backgroundColor: Appcolor.backgroundColor,
                 ),
                 onPressed: _guardar,
                 child: const Text(
                   "Guardar",
-                  style: TextStyle(color: Colors.blue),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(300, 40),
-                  backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                  backgroundColor: Appcolor.backgroundColor,
                 ),
                 onPressed: () => Navigator.pop(context),
                 child: const Text(
                   "Cancelar",
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 230, 14, 14),
-                  ),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ],

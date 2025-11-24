@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/screens/admin/editarInformacionAdmin/EditarUsuario.dart';
 import 'package:flutter_application/screens/admin/PantallaRegistrosAdmin.dart';
 import 'package:flutter_application/services/LogicaUsuarios.dart';
@@ -28,7 +29,7 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gestión de Usuarios'),
-        backgroundColor: const Color.fromRGBO(61, 180, 228, 1),
+        backgroundColor: Appcolor.backgroundColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -162,7 +163,7 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(color: Colors.blue, width: 1.5),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: () {
                 Navigator.push(
@@ -171,24 +172,23 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                     builder: (context) => const PantallaRegistrosAdmin(),
                   ),
                 ).then((_) {
-                  // refresh list when returning
                   setState(() {
                     users = LogicaUsuarios.getListaUsuarios();
                   });
                 });
               },
-              child: const Text('Crear Usuario'),
+              child: const Text('Crear Usuario', style: TextStyle(color: Colors.white)),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(color: Colors.blue, width: 1.5),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Volver'),
+              child: const Text('Volver', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

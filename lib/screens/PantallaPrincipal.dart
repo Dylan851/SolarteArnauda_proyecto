@@ -4,6 +4,7 @@ import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:flutter_application/controllers/LoginController.dart';
 import 'package:flutter_application/screens/cliente/PantallaSecundariaCliente.dart';
 import 'package:flutter_application/screens/admin/AdminHome.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({super.key});
@@ -57,141 +58,145 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
-        title: Text("Pantalla Principal"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              child: Image.asset(
-                'assets/images/ronnieColeman.png',
-                width: 400,
-                height: 400,
-              ),
-            ),
-            SizedBox(
-              width: 500,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Nombre",
-                  border: OutlineInputBorder(),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Appcolor.backgroundColor,
+          title: Text("Pantalla Principal"),
+          automaticallyImplyLeading: false,
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: Image.asset(
+                  'assets/images/ronnieColeman.png',
+                  width: 400,
+                  height: 400,
                 ),
-                onChanged: (value) {
-                  nombre = value;
-                },
               ),
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              width: 500,
-              child: TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "Contraseña",
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) => _contrasena = value,
-              ),
-            ),
-            SizedBox(height: 15),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 230, 14, 14),
-              ),
-              onPressed: _validar,
-              child: Text(
-                "Login",
-                style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
-              ),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 230, 14, 14),
-              ),
-              onPressed: _PantallaRegistros,
-              child: Text(
-                "Registrate",
-                style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
-              ),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 230, 14, 14),
-              ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    TextEditingController usernameController =
-                        TextEditingController();
-
-                    return AlertDialog(
-                      title: Text(
-                        'Recuperar contraseña',
-                        style: TextStyle(
-                          color: const Color.fromARGB(255, 0, 0, 0),
-                        ),
-                      ),
-                      content: TextField(
-                        controller: usernameController,
-                        decoration: InputDecoration(
-                          labelText: 'Nombre de usuario',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(); // Cierra el diálogo
-                          },
-                          child: Text('Cancelar'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            if (usernameController.text.isEmpty) {
-                              print('Por favor, ingrese un nombre de usuario.');
-                              return;
-                            } else {
-                              var usuario = loginController.getUsuario(
-                                usernameController.text,
-                              );
-                              if (usuario == null) {
-                                print('El nombre de usuario no existe.');
-                                return;
-                              }
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Contraseña recuperada: ${usuario.getPassword}',
-                                  ),
-                                  duration: Duration(seconds: 3),
-                                ),
-                              );
-                            }
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Aceptar'),
-                        ),
-                      ],
-                    );
+              SizedBox(
+                width: 500,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "Nombre",
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    nombre = value;
                   },
-                );
-              },
-              child: Text(
-                'Recuperar contraseña',
-                style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 10),
+              SizedBox(
+                width: 500,
+                child: TextFormField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Contraseña",
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) => _contrasena = value,
+                ),
+              ),
+              SizedBox(height: 15),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(300, 40),
+                  backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                ),
+                onPressed: _validar,
+                child: Text(
+                  "Login",
+                  style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                ),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(300, 40),
+                  backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                ),
+                onPressed: _PantallaRegistros,
+                child: Text(
+                  "Registrate",
+                  style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                ),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(300, 40),
+                  backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      TextEditingController usernameController =
+                          TextEditingController();
+
+                      return AlertDialog(
+                        title: Text(
+                          'Recuperar contraseña',
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ),
+                        content: TextField(
+                          controller: usernameController,
+                          decoration: InputDecoration(
+                            labelText: 'Nombre de usuario',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Cierra el diálogo
+                            },
+                            child: Text('Cancelar'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              if (usernameController.text.isEmpty) {
+                                print('Por favor, ingrese un nombre de usuario.');
+                                return;
+                              } else {
+                                var usuario = loginController.getUsuario(
+                                  usernameController.text,
+                                );
+                                if (usuario == null) {
+                                  print('El nombre de usuario no existe.');
+                                  return;
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Contraseña recuperada: ${usuario.getPassword}',
+                                    ),
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                              }
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Aceptar'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text(
+                  'Recuperar contraseña',
+                  style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

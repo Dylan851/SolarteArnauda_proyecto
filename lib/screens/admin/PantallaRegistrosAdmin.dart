@@ -5,6 +5,7 @@ import 'package:flutter_application/config/utils/Camera.dart';
 import 'package:flutter_application/controllers/LoginController.dart';
 import 'package:flutter_application/screens/PantallaPrincipal.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 
 class PantallaRegistrosAdmin extends StatefulWidget {
   const PantallaRegistrosAdmin({super.key});
@@ -81,7 +82,7 @@ class _PantallaRegistrosAdminState extends State<PantallaRegistrosAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(61, 180, 228, 1),
+        backgroundColor: Appcolor.backgroundColor,
         title: Text("Registro"),
       ),
       body: Padding(
@@ -239,22 +240,19 @@ class _PantallaRegistrosAdminState extends State<PantallaRegistrosAdmin> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: _aceptar,
-              child: Text("Aceptar", style: TextStyle(color: Colors.blue)),
+              child: Text("Aceptar", style: TextStyle(color: Colors.white)),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(300, 40),
-                backgroundColor: const Color.fromARGB(255, 187, 228, 247),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: _cancelar,
-              child: Text(
-                "Cancelar",
-                style: TextStyle(color: const Color.fromARGB(255, 230, 14, 14)),
-              ),
+              child: Text("Cancelar", style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

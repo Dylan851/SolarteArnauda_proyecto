@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/screens/MiPerfil.dart';
 import 'package:flutter_application/screens/PantallaPrincipal.dart';
 
@@ -17,23 +18,21 @@ class _drawerGeneralState extends State<drawerGeneral> {
         children: [
           Container(
             height: 60,
-            color: Color.fromRGBO(61, 180, 228, 1),
+            color: Appcolor.backgroundColor,
             child: DrawerHeader(child: Row(children: [Text("Menu")])),
           ),
           ListTile(
             leading: Icon(Icons.house),
             title: Text("Pantalla Principal"),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PantallaPrincipal()),
-              );
+              Navigator.pop(context);
             },
           ),
           ListTile(
             leading: Icon(Icons.person),
             title: Text("Mi perfil"),
             onTap: () {
+              Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Miperfil()),
@@ -44,9 +43,10 @@ class _drawerGeneralState extends State<drawerGeneral> {
             leading: Icon(Icons.exit_to_app),
             title: Text("Salir"),
             onTap: () {
-              Navigator.push(
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => PantallaPrincipal()),
+                (route) => false,
               );
             },
           ),

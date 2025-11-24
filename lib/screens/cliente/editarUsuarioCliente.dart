@@ -33,8 +33,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
   late TextEditingController _edadController;
   String? photoPath;
   String? _lugarNacimiento;
-  late bool _esAdmin;
-  bool _ocultarContrasena = false;
+  bool _ocultarContrasena = true;
 
   @override
   void initState() {
@@ -78,10 +77,22 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
           int.tryParse(_edadController.text),
           photoPath,
           _lugarNacimiento,
-          _esAdmin,
+          widget.user.getIsAdmin,
         );
-        // Devolver los datos actualizados a la pantalla anterior (ContactoCliente)
-        Navigator.pop(context);
+
+        // Actualizar el usuario actual en memoria
+        final updatedUser = LogicaUsuarios.getListaUsuarios().firstWhere(
+          (u) => u.name == _nombreController.text,
+        );
+        
+        usuarioActual = updatedUser;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Usuario actualizado correctamente")),
+        );
+
+        // Devolver el usuario actualizado
+        Navigator.pop(context, updatedUser);
       } else {
         const snackBar = SnackBar(
           content: Text("Las contraseñas no son iguales"),
@@ -118,7 +129,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                         _generoSelecionado == Genero.Sr ? "Sr." : "Sra.",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: const Color.fromARGB(255, 230, 14, 14),
+                          color: Appcolor.backgroundColor,
                         ),
                       ),
                     ],
