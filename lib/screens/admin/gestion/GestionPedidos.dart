@@ -159,18 +159,6 @@ class _GestionPedidosState extends State<GestionPedidos> {
 
             const SizedBox(height: 16),
 
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: const Size(300, 50),
-                side: BorderSide(
-                  color: Color.fromARGB(255, 230, 14, 14),
-                  width: 1.5,
-                ),
-              ),
-              onPressed: () {},
-              child: const Text('Crear Pedido'),
-            ),
-
             const SizedBox(height: 12),
 
             ElevatedButton(
