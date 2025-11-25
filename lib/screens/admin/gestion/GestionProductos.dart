@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/models/Productos.dart';
 import 'package:flutter_application/screens/admin/editarInformacionAdmin/EditarProducto.dart';
 import 'package:flutter_application/services/LogicaProductos.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class GestionProductos extends StatefulWidget {
   const GestionProductos({super.key});
@@ -54,10 +56,12 @@ class _GestionProductosState extends State<GestionProductos> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestión de Productos'),
+        title: Text(l10n.productsManagementTitle),
         backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -138,11 +142,7 @@ class _GestionProductosState extends State<GestionProductos> {
                                 _cargarProductos();
                                 if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "Producto actualizado exitosamente",
-                                      ),
-                                    ),
+                                    SnackBar(content: Text(l10n.productUpdated)),
                                   );
                                 }
                               }
@@ -154,37 +154,26 @@ class _GestionProductosState extends State<GestionProductos> {
                               final confirm = await showDialog<bool>(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: const Text('Confirmar eliminación'),
-                                  content: Text(
-                                    '¿Eliminar el producto "${producto.getNombre}"?',
-                                  ),
+                                  title: Text(l10n.confirmDeletionTitle),
+                                  content: Text('${l10n.deleteProductQuestionPrefix} "${producto.getNombre}"?'),
                                   actions: [
                                     TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
-                                      child: const Text('Cancelar'),
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: Text(l10n.cancel),
                                     ),
                                     TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
-                                      child: const Text('Eliminar'),
+                                      onPressed: () => Navigator.of(context).pop(true),
+                                      child: Text(l10n.delete),
                                     ),
                                   ],
                                 ),
                               );
-
                               if (confirm == true) {
-                                LogicaProductos.eliminarProducto(
-                                  producto.getNombre,
-                                );
+                                LogicaProductos.eliminarProducto(producto.getNombre);
                                 _cargarProductos();
                                 if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Producto "${producto.getNombre}" eliminado',
-                                      ),
-                                    ),
+                                    SnackBar(content: Text('${l10n.delete} "${producto.getNombre}"')),
                                   );
                                 }
                               }
@@ -215,7 +204,7 @@ class _GestionProductosState extends State<GestionProductos> {
                 ),
               ),
               onPressed: _crearProducto,
-              child: const Text('Crear Producto'),
+              child: Text(l10n.createUser.replaceAll('Usuario', 'Producto')),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
@@ -227,7 +216,7 @@ class _GestionProductosState extends State<GestionProductos> {
                 ),
               ),
               onPressed: () => Navigator.pop(context),
-              child: const Text('Volver'),
+              child: Text(l10n.returnText),
             ),
           ],
         ),

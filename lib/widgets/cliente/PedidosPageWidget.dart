@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/controllers/LoginPedido.dart';
 import 'package:flutter_application/models/Pedido.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
 
 class PedidosPageWidget extends StatelessWidget {
   final ThemeData theme;
@@ -10,6 +11,7 @@ class PedidosPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       child: FutureBuilder(
         future: Future.delayed(
@@ -26,7 +28,7 @@ class PedidosPageWidget extends StatelessWidget {
           if (pedidos.isEmpty) {
             return Center(
               child: Text(
-                "No tienes pedidos aún",
+                l10n.noOrdersYet,
                 style: theme.textTheme.headlineMedium,
               ),
             );
@@ -44,15 +46,15 @@ class PedidosPageWidget extends StatelessWidget {
               switch (pedido.estado) {
                 case "enviado":
                   colorEstado = Colors.green;
-                  txtEstado = "Enviado";
+                  txtEstado = l10n.sent;
                   break;
                 case "denegado":
                   colorEstado = Colors.red;
-                  txtEstado = "Denegado";
+                  txtEstado = l10n.denied;
                   break;
                 default:
                   colorEstado = Colors.orange;
-                  txtEstado = "En trámite";
+                  txtEstado = l10n.inProcess;
               }
 
               return Card(
@@ -63,7 +65,7 @@ class PedidosPageWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Pedido #${pedido.id}",
+                        "${l10n.order} #${pedido.id}",
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -83,15 +85,15 @@ class PedidosPageWidget extends StatelessWidget {
                       }),
                       const Divider(),
                       Text(
-                        "Total: \$${pedido.total.toStringAsFixed(2)}",
+                        "${l10n.total}: \$${pedido.total.toStringAsFixed(2)}",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          const Text(
-                            "Estado: ",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Text(
+                            "${l10n.status}: ",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
                             txtEstado,
@@ -104,7 +106,7 @@ class PedidosPageWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        "Fecha: ${pedido.fecha.toLocal()}",
+                        "${l10n.date}: ${pedido.fecha.toLocal()}",
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ],

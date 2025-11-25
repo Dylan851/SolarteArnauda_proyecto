@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/models/Productos.dart';
 import 'package:flutter_application/services/LogicaProductos.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class GestionInventario extends StatefulWidget {
   const GestionInventario({super.key});
@@ -27,10 +29,12 @@ class _GestionInventarioState extends State<GestionInventario> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestión de Productos'),
+        title: Text(l10n.inventoryManagementTitle),
         backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
@@ -90,13 +94,11 @@ class _GestionInventarioState extends State<GestionInventario> {
                             builder: (context) {
                               int nuevaCantidad = producto.getCantidad;
                               return AlertDialog(
-                                title: const Text('Modificar Cantidad'),
+                                title: Text(l10n.modifyQuantity),
                                 content: TextFormField(
                                   initialValue: producto.getCantidad.toString(),
                                   keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Cantidad',
-                                  ),
+                                  decoration: InputDecoration(labelText: l10n.quantity),
                                   onChanged: (value) {
                                     nuevaCantidad = int.tryParse(value) ?? 0;
                                   },
@@ -106,7 +108,7 @@ class _GestionInventarioState extends State<GestionInventario> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: const Text('Cancelar'),
+                                    child: Text(l10n.cancel),
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
@@ -115,7 +117,7 @@ class _GestionInventarioState extends State<GestionInventario> {
                                       });
                                       Navigator.of(context).pop();
                                     },
-                                    child: const Text('Guardar'),
+                                    child: Text(l10n.save),
                                   ),
                                 ],
                               );
@@ -134,9 +136,9 @@ class _GestionInventarioState extends State<GestionInventario> {
                             14,
                           ),
                         ),
-                        child: const Text(
-                          'Modificar Cantidad',
-                          style: TextStyle(fontSize: 12),
+                        child: Text(
+                          l10n.modifyQuantity,
+                          style: const TextStyle(fontSize: 12),
                         ),
                       ),
                     ),
@@ -154,7 +156,7 @@ class _GestionInventarioState extends State<GestionInventario> {
                 ),
               ),
               onPressed: () => Navigator.pop(context),
-              child: const Text('Volver'),
+              child: Text(l10n.returnText),
             ),
           ],
         ),

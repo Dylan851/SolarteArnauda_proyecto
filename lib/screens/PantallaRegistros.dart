@@ -5,6 +5,8 @@ import 'package:flutter_application/config/utils/Camera.dart';
 import 'package:flutter_application/controllers/LoginController.dart';
 import 'package:flutter_application/screens/PantallaPrincipal.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 enum Genero { Sr, Sra }
 
@@ -51,22 +53,19 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
             MaterialPageRoute(builder: (context) => const PantallaPrincipal()),
           );
         } else {
-          const snackBar = SnackBar(
-            content: Text("Acepta terminos y condiciones"),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context)!.mustAcceptTerms)),
           );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       } else {
-        const snackBar = SnackBar(
-          content: Text("Las contraseñas no son iguales"),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.passwordsNotEqual)),
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-      const snackBar = SnackBar(
-        content: Text("Campos vacios en nombre y contraseña"),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.fieldsEmptyNamePassword)),
       );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -79,10 +78,12 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Appcolor.backgroundColor,
-        title: Text("Registro"),
+        title: Text(l10n.register),
+        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
@@ -90,8 +91,8 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
           children: [
             Row(
               children: [
-                const Text("Tratamiento: "),
-                SizedBox(width: 20),
+                Text("${l10n.treatment} "),
+                const SizedBox(width: 20),
                 Radio<Genero>(
                   value: Genero.Sr,
                   groupValue: generoSelecionado,
@@ -101,8 +102,8 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
                     });
                   },
                 ),
-                const Text(" Sr."),
-                SizedBox(width: 20),
+                Text(" ${l10n.mr}"),
+                const SizedBox(width: 20),
                 Radio<Genero>(
                   value: Genero.Sra,
                   groupValue: generoSelecionado,
@@ -112,61 +113,61 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
                     });
                   },
                 ),
-                const Text(" Sra."),
+                Text(" ${l10n.mrs}"),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Column(
               children: [
                 SizedBox(
                   child: TextFormField(
                     decoration: InputDecoration(
-                      labelText: "Nombre",
-                      border: OutlineInputBorder(),
+                      labelText: l10n.username,
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {
                       _nombre = value;
                     },
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 SizedBox(
                   child: TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: "Contraseña",
-                      border: OutlineInputBorder(),
+                      labelText: l10n.password,
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) => _contrasena = value,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 SizedBox(
                   child: TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: "Repite Contraseña",
-                      border: OutlineInputBorder(),
+                      labelText: l10n.repeatPassword,
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) => _repiteContrasena = value,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
-                Text("Cargar imagen:"),
+                Text(l10n.loadImage),
                 photoPath != null
                     ? Image(
                         image: FileImage(File(photoPath!)),
                         fit: BoxFit.fill,
                       )
                     : Container(),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.image),
-                  label: const Text("Galería"),
+                  label: Text(l10n.gallery),
                   onPressed: () async {
                     final path = await CameraGalleryService().selectPhoto();
                     if (path == null) return;
@@ -178,7 +179,7 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
                 const SizedBox(width: 16),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.camera_alt),
-                  label: const Text("Cámara"),
+                  label: Text(l10n.camera),
                   onPressed: () async {
                     final path = await CameraGalleryService().takePhoto();
                     if (path == null) return;
@@ -189,13 +190,13 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             SizedBox(
               child: TextField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: "Edad",
-                  border: OutlineInputBorder(),
+                  labelText: l10n.age,
+                  border: const OutlineInputBorder(),
                 ),
                 onChanged: (value) {
                   _edad = int.tryParse(value);
@@ -203,12 +204,12 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SizedBox(
               child: DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: "Lugar de nacimiento",
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.placeOfBirth,
+                  border: const OutlineInputBorder(),
                 ),
                 value: _lugarNacimiento,
                 items: _listaLugares.map((String lugar) {
@@ -223,7 +224,7 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
             ),
             Row(
               children: [
-                const Text("Acepto los terminos y condiciones"),
+                Text(l10n.acceptTerms),
                 Checkbox(
                   value: _aceptaTerminos,
                   onChanged: (bool? value) {
@@ -234,23 +235,23 @@ class _PantallaRegistrosState extends State<PantallaRegistros> {
                 ),
               ],
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(300, 40),
                 backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: _aceptar,
-              child: Text("Aceptar", style: TextStyle(color: Colors.white)),
+              child: Text(l10n.accept, style: const TextStyle(color: Colors.white)),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(300, 40),
                 backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: _cancelar,
-              child: Text("Cancelar", style: TextStyle(color: Colors.white)),
+              child: Text(l10n.cancel, style: const TextStyle(color: Colors.white)),
             ),
           ],
         ),

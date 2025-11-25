@@ -6,12 +6,15 @@ import 'package:flutter_application/screens/admin/gestion/GestionUsuarios.dart';
 import 'package:flutter_application/screens/admin/gestion/GestionPedidos.dart';
 import 'package:flutter_application/screens/admin/gestion/GestionProductos.dart';
 import 'package:flutter_application/screens/admin/gestion/GestionInventario.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class AdminHome extends StatelessWidget {
   const AdminHome({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return WillPopScope(
       onWillPop: () async {
         // Clear user session
@@ -26,7 +29,7 @@ class AdminHome extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Panel de administración'),
+          title: Text(l10n.adminPanel),
           backgroundColor: Appcolor.backgroundColor,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -41,6 +44,7 @@ class AdminHome extends StatelessWidget {
               );
             },
           ),
+          actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
         ),
         body: Center(
           child: Column(
@@ -59,7 +63,7 @@ class AdminHome extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text('Gestion Usuarios', style: TextStyle(color: Colors.white)),
+                child: Text(l10n.manageUsers, style: const TextStyle(color: Colors.white)),
               ),
               const SizedBox(height: 12),
               ElevatedButton(
@@ -75,7 +79,7 @@ class AdminHome extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text('Gestion Pedidos', style: TextStyle(color: Colors.white)),
+                child: Text(l10n.manageOrders, style: const TextStyle(color: Colors.white)),
               ),
               const SizedBox(height: 12),
               ElevatedButton(
@@ -91,7 +95,7 @@ class AdminHome extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text('Gestion Productos', style: TextStyle(color: Colors.white)),
+                child: Text(l10n.manageProducts, style: const TextStyle(color: Colors.white)),
               ),
               const SizedBox(height: 12),
               ElevatedButton(
@@ -107,7 +111,7 @@ class AdminHome extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text('Gestion Inventario', style: TextStyle(color: Colors.white)),
+                child: Text(l10n.manageInventory, style: const TextStyle(color: Colors.white)),
               ),
             ],
           ),

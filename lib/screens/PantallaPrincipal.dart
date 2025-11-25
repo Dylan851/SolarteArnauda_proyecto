@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/config/utils/music.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:flutter_application/controllers/LoginController.dart';
 import 'package:flutter_application/screens/cliente/PantallaSecundariaCliente.dart';
 import 'package:flutter_application/screens/admin/AdminHome.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({super.key});
@@ -24,12 +26,13 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     );
   }
 
-  void _validar() {
+  void _validar() async {
     if (nombre.isNotEmpty && _contrasena.isNotEmpty) {
       final usuario = loginController.getUsuario(nombre);
       if (usuario != null &&
           usuario.getPassword == _contrasena &&
           usuario.getIsAdmin == true) {
+        await Music.playMusic(); // Play music on admin login
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const AdminHome()),
@@ -39,37 +42,42 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
       if (loginController.validarUsuario(nombre, _contrasena) == true) {
         usuarioActual = usuario ?? loginController.getUsuario(nombre);
+        await Music.playMusic(); // Play music on client login
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const PantallaSecundaria()),
         );
       } else {
         print("Usuario o contraseña incorrectos");
-        const snackBar = SnackBar(
-          content: Text("Usuario o contraseña incorrectos"),
+        const snackBar = null;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.invalidCredentials)),
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
       print("El campo esta vacio");
-      const snackBar = SnackBar(content: Text("El campo esta vacio"));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.fieldEmpty)),
+      );
     }
-  }
-
-  void _reproducirAudio() async {
-    await Music.playMusic();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Appcolor.backgroundColor,
-          title: Text("Pantalla Principal"),
+          title: Text(l10n.mainScreenTitle),
           automaticallyImplyLeading: false,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: buildLanguageDropdown(),
+            ),
+          ],
         ),
         body: Center(
           child: Column(
@@ -86,7 +94,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                 width: 500,
                 child: TextFormField(
                   decoration: InputDecoration(
-                    labelText: "Nombre",
+                    labelText: l10n.username,
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) {
@@ -100,7 +108,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                 child: TextFormField(
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: "Contraseña",
+                    labelText: l10n.password,
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) => _contrasena = value,
@@ -113,10 +121,9 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                   backgroundColor: const Color.fromARGB(255, 230, 14, 14),
                 ),
                 onPressed: _validar,
-                onLongPress: _reproducirAudio,
                 child: Text(
-                  "Login",
-                  style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                  l10n.login,
+                  style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                 ),
               ),
               SizedBox(height: 10),
@@ -127,8 +134,8 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                 ),
                 onPressed: _PantallaRegistros,
                 child: Text(
-                  "Registrate",
-                  style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                  l10n.register,
+                  style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                 ),
               ),
               SizedBox(height: 10),
@@ -146,31 +153,29 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
                       return AlertDialog(
                         title: Text(
-                          'Recuperar contraseña',
-                          style: TextStyle(
-                            color: const Color.fromARGB(255, 0, 0, 0),
+                          l10n.recoverPassword,
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
                           ),
                         ),
                         content: TextField(
                           controller: usernameController,
                           decoration: InputDecoration(
-                            labelText: 'Nombre de usuario',
-                            border: OutlineInputBorder(),
+                            labelText: l10n.username,
+                            border: const OutlineInputBorder(),
                           ),
                         ),
                         actions: [
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop(); // Cierra el diálogo
+                              Navigator.of(context).pop();
                             },
-                            child: Text('Cancelar'),
+                            child: Text(l10n.cancel),
                           ),
                           TextButton(
                             onPressed: () {
                               if (usernameController.text.isEmpty) {
-                                print(
-                                  'Por favor, ingrese un nombre de usuario.',
-                                );
+                                print(l10n.fieldEmpty);
                                 return;
                               } else {
                                 var usuario = loginController.getUsuario(
@@ -183,15 +188,15 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      'Contraseña recuperada: ${usuario.getPassword}',
+                                      '${l10n.passwordRecovered}${usuario.getPassword}',
                                     ),
-                                    duration: Duration(seconds: 3),
+                                    duration: const Duration(seconds: 3),
                                   ),
                                 );
                               }
                               Navigator.of(context).pop();
                             },
-                            child: Text('Aceptar'),
+                            child: Text(l10n.accept),
                           ),
                         ],
                       );
@@ -199,8 +204,8 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                   );
                 },
                 child: Text(
-                  'Recuperar contraseña',
-                  style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                  l10n.recoverPassword,
+                  style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                 ),
               ),
             ],

@@ -11,6 +11,8 @@ import 'package:flutter_application/widgets/cliente/PerfilPageWidget.dart';
 import 'package:flutter_application/widgets/cliente/ProductosPageWidget.dart';
 import 'package:flutter_application/widgets/cliente/ResumenCompraDialog.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
 
 class PantallaSecundaria extends StatefulWidget {
   const PantallaSecundaria({super.key});
@@ -69,6 +71,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final productos = LoginProductos.recorrerProductos();
+    final l10n = AppLocalizations.of(context)!;
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -78,27 +81,28 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
               setState(() => currentPageIndex = index),
           indicatorColor: Appcolor.backgroundColor,
           selectedIndex: currentPageIndex,
-          destinations: const <Widget>[
+          destinations: <Widget>[
             NavigationDestination(
-              selectedIcon: Icon(Icons.home),
-              icon: Icon(Icons.home_outlined),
-              label: 'Home',
+              selectedIcon: const Icon(Icons.home),
+              icon: const Icon(Icons.home_outlined),
+              label: l10n.home,
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.shopping_cart),
-              icon: Icon(Icons.shopping_cart_outlined),
-              label: 'Pedidos',
+              selectedIcon: const Icon(Icons.shopping_cart),
+              icon: const Icon(Icons.shopping_cart_outlined),
+              label: l10n.orders,
             ),
             NavigationDestination(
-              icon: Badge(child: Icon(Icons.person)),
-              label: 'Yo',
+              icon: const Badge(child: Icon(Icons.person)),
+              label: l10n.me,
             ),
           ],
         ),
         drawer: const drawerGeneral(),
         appBar: AppBar(
           backgroundColor: Appcolor.backgroundColor,
-          title: Text("Bienvenido ${usuarioActual?.name}"),
+          title: Text("${l10n.welcome} ${usuarioActual?.name}"),
+          actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
         ),
         body: <Widget>[
           ProductosPageWidget(

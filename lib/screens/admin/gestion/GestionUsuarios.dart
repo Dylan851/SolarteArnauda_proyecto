@@ -3,6 +3,8 @@ import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/screens/admin/editarInformacionAdmin/EditarUsuario.dart';
 import 'package:flutter_application/screens/admin/PantallaRegistrosAdmin.dart';
 import 'package:flutter_application/services/LogicaUsuarios.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class GestionUsuarios extends StatefulWidget {
   const GestionUsuarios({super.key});
@@ -26,10 +28,12 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestión de Usuarios'),
+        title: Text(l10n.usersManagementTitle),
         backgroundColor: Appcolor.backgroundColor,
+        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -66,8 +70,7 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        EditarUsuario(user: user),
+                                    builder: (context) => EditarUsuario(user: user),
                                   ),
                                 ).then((edited) {
                                   if (edited == true) {
@@ -76,9 +79,7 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text(
-                                          'Usuario actualizado: ${user.getName}',
-                                        ),
+                                        content: Text('${l10n.updatedUserPrefix} ${user.getName}'),
                                       ),
                                     );
                                   }
@@ -91,20 +92,16 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                 final confirm = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
-                                    title: const Text('Confirmar eliminación'),
-                                    content: Text(
-                                      '¿Eliminar a ${user.getName}?',
-                                    ),
+                                    title: Text(l10n.confirmDeletionTitle),
+                                    content: Text('${l10n.confirmDeletionQuestionUserPrefix} ${user.getName}?'),
                                     actions: [
                                       TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(false),
-                                        child: const Text('Cancelar'),
+                                        onPressed: () => Navigator.of(context).pop(false),
+                                        child: Text(l10n.cancel),
                                       ),
                                       TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(true),
-                                        child: const Text('Eliminar'),
+                                        onPressed: () => Navigator.of(context).pop(true),
+                                        child: Text(l10n.delete),
                                       ),
                                     ],
                                   ),
@@ -115,11 +112,7 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                     users = LogicaUsuarios.getListaUsuarios();
                                   });
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Eliminado: ${user.getName}',
-                                      ),
-                                    ),
+                                    SnackBar(content: Text('${l10n.delete} ${user.getName}')),
                                   );
                                 }
                               },
@@ -138,15 +131,13 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                 setState(() {
                                   users = LogicaUsuarios.getListaUsuarios();
                                 });
-                                final updated = users.firstWhere(
-                                  (u) => u.name == user.name,
-                                );
+                                final updated = users.firstWhere((u) => u.name == user.name);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
                                       (updated.getIsBlocked == true)
-                                          ? 'Bloqueado: ${updated.getName}'
-                                          : 'Desbloqueado: ${updated.getName}',
+                                          ? '${l10n.blockedUserPrefix} ${updated.getName}'
+                                          : '${l10n.unblockedUserPrefix} ${updated.getName}',
                                     ),
                                   ),
                                 );
@@ -177,7 +168,7 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                   });
                 });
               },
-              child: const Text('Crear Usuario', style: TextStyle(color: Colors.white)),
+              child: Text(l10n.createUser, style: const TextStyle(color: Colors.white)),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
@@ -188,7 +179,7 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Volver', style: TextStyle(color: Colors.white)),
+              child: Text(l10n.returnText, style: const TextStyle(color: Colors.white)),
             ),
           ],
         ),

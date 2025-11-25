@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/controllers/CarritoController.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
 
 class ProductosPageWidget extends StatelessWidget {
   final List productos;
@@ -16,6 +17,7 @@ class ProductosPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       child: SizedBox.expand(
         child: Column(
@@ -101,7 +103,7 @@ class ProductosPageWidget extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Total: \$${CarritoController.calcularTotal(productos).toStringAsFixed(2)}',
+                    '${l10n.total}: \$${CarritoController.calcularTotal(productos).toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -115,9 +117,9 @@ class ProductosPageWidget extends StatelessWidget {
                       minimumSize: const Size(double.infinity, 50),
                     ),
                     icon: const Icon(Icons.shopping_cart, color: Colors.white),
-                    label: const Text(
-                      'Resumen de compra',
-                      style: TextStyle(color: Colors.white),
+                    label: Text(
+                      l10n.purchaseSummary,
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                 ],

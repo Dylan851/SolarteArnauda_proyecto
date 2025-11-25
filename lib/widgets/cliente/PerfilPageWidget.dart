@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
 
 class PerfilPageWidget extends StatelessWidget {
   final VoidCallback onContacto;
@@ -13,6 +14,7 @@ class PerfilPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       child: Center(
         child: Column(
@@ -27,10 +29,10 @@ class PerfilPageWidget extends StatelessWidget {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.contact_mail, color: Colors.white),
-                    SizedBox(width: 10),
-                    Text('Contacto', style: TextStyle(color: Colors.white)),
+                  children: [
+                    const Icon(Icons.contact_mail, color: Colors.white),
+                    const SizedBox(width: 10),
+                    Text(l10n.contact, style: const TextStyle(color: Colors.white)),
                   ],
                 ),
               ),
@@ -45,10 +47,10 @@ class PerfilPageWidget extends StatelessWidget {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.person, color: Colors.white),
-                    SizedBox(width: 10),
-                    Text('Editar Usuario', style: TextStyle(color: Colors.white)),
+                  children: [
+                    const Icon(Icons.person, color: Colors.white),
+                    const SizedBox(width: 10),
+                    Text(l10n.editUser, style: const TextStyle(color: Colors.white)),
                   ],
                 ),
               ),

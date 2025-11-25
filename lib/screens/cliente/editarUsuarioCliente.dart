@@ -7,6 +7,8 @@ import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:flutter_application/services/LogicaUsuarios.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class EditarUsuarioCliente extends StatefulWidget {
   final User user;
@@ -88,31 +90,31 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
         usuarioActual = updatedUser;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Usuario actualizado correctamente")),
+          SnackBar(content: Text(AppLocalizations.of(context)!.userUpdatedSuccessfully)),
         );
 
         // Devolver el usuario actualizado
         Navigator.pop(context, updatedUser);
       } else {
-        const snackBar = SnackBar(
-          content: Text("Las contraseñas no son iguales"),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.passwordsNotEqual)),
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-      const snackBar = SnackBar(
-        content: Text("Campos vacíos en nombre y contraseña"),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.fieldsEmptyNamePassword)),
       );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Appcolor.backgroundColor,
-        title: const Text("Editar Usuario"),
+        title: Text(l10n.editUserTitle),
+        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
@@ -124,9 +126,9 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                 children: [
                   Row(
                     children: [
-                      const Text("Tratamiento actual: "),
+                      Text("${l10n.treatment.replaceAll(':', '')} actual: "),
                       Text(
-                        _generoSelecionado == Genero.Sr ? "Sr." : "Sra.",
+                        _generoSelecionado == Genero.Sr ? l10n.mr : l10n.mrs,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Appcolor.backgroundColor,
@@ -137,7 +139,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      const Text("Cambiar a: "),
+                      Text("${l10n.treatment.replaceAll(':', '')} ${l10n.mr}/${l10n.mrs}"),
                       const SizedBox(width: 20),
                       Radio<Genero>(
                         value: Genero.Sr,
@@ -169,9 +171,9 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                 children: [
                   TextFormField(
                     controller: _nombreController,
-                    decoration: const InputDecoration(
-                      labelText: "Nombre",
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l10n.username,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -179,7 +181,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                     controller: _contrasenaController,
                     obscureText: _ocultarContrasena,
                     decoration: InputDecoration(
-                      labelText: "Contraseña",
+                      labelText: l10n.password,
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -200,7 +202,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                     controller: _repiteContrasenaController,
                     obscureText: _ocultarContrasena,
                     decoration: InputDecoration(
-                      labelText: "Repite Contraseña",
+                      labelText: l10n.repeatPassword,
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -221,7 +223,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  const Text("Cargar imagen:"),
+                  Text(l10n.loadImage),
                   if (photoPath != null)
                     SizedBox(
                       width: 50,
@@ -231,7 +233,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                   const SizedBox(width: 20),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.image),
-                    label: const Text("Galería"),
+                    label: Text(l10n.gallery),
                     onPressed: () async {
                       final path = await CameraGalleryService().selectPhoto();
                       if (path == null) return;
@@ -243,7 +245,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                   const SizedBox(width: 16),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.camera_alt),
-                    label: const Text("Cámara"),
+                    label: Text(l10n.camera),
                     onPressed: () async {
                       final path = await CameraGalleryService().takePhoto();
                       if (path == null) return;
@@ -278,9 +280,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                     controller: _edadController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      labelText: widget.user.getEdad == null
-                          ? "Edad"
-                          : "Nueva edad",
+                      labelText: widget.user.getEdad == null ? l10n.age : "${l10n.age}",
                       border: const OutlineInputBorder(),
                     ),
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -310,8 +310,8 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                   DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                       labelText: widget.user.getNacimiento == null
-                          ? "Lugar de nacimiento"
-                          : "Nuevo lugar de nacimiento",
+                          ? l10n.placeOfBirth
+                          : l10n.placeOfBirth,
                       border: const OutlineInputBorder(),
                     ),
                     value: _lugarNacimiento,
@@ -333,10 +333,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                   backgroundColor: Appcolor.backgroundColor,
                 ),
                 onPressed: _guardar,
-                child: const Text(
-                  "Guardar",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text(l10n.save, style: const TextStyle(color: Colors.white)),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
@@ -345,10 +342,7 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                   backgroundColor: Appcolor.backgroundColor,
                 ),
                 onPressed: () => Navigator.pop(context),
-                child: const Text(
-                  "Cancelar",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text(l10n.cancel, style: const TextStyle(color: Colors.white)),
               ),
             ],
           ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class Miperfil extends StatelessWidget {
   final User user;
@@ -10,14 +12,15 @@ class Miperfil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usuario = usuarioActual;
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Appcolor.backgroundColor,
-        title: Text("Contacto Cliente"),
+        title: Text(l10n.myProfileTitle),
+        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -32,33 +35,23 @@ class Miperfil extends StatelessWidget {
             // NOMBRE DEL USUARIO
             Text(
               user.getName,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
-            SizedBox(height: 20),
-
-            // DATOS DEL USUARIO EN UNA COLUMNA
-            infoItem("Contraseña:", user.getPassword),
+            const SizedBox(height: 20),
+            infoItem("${l10n.password}:", user.getPassword),
             infoItem(
-              "Género:",
+              "${l10n.gender}",
               user.getGenero != null
                   ? usuario!.genero.toString().split('.').last
-                  : "No hay datos",
+                  : l10n.noData,
             ),
-            infoItem("Edad:", user.getEdad.toString()),
-            infoItem(
-              "Lugar de nacimiento:",
-              user.getNacimiento ?? "No hay datos",
-            ),
-
-            SizedBox(height: 40),
-
-            // BOTÓN VOLVER
+            infoItem("${l10n.age}:", user.getEdad.toString()),
+            infoItem("${l10n.placeOfBirth}:", user.getNacimiento ?? l10n.noData),
+            const SizedBox(height: 40),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Volver"),
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.back),
             ),
           ],
         ),
