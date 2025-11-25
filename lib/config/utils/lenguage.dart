@@ -9,6 +9,7 @@ extension LanguageExtension on Language {
         return 'en';
       case Language.spanish:
         return 'es';
+      // ignore: unreachable_switch_default
       default:
         return 'en';
     }
@@ -20,6 +21,7 @@ extension LanguageExtension on Language {
         return 'English';
       case Language.spanish:
         return 'Español';
+      // ignore: unreachable_switch_default
       default:
         return 'English';
     }
@@ -31,6 +33,7 @@ extension LanguageExtension on Language {
         return '🇺🇸';
       case Language.spanish:
         return '🇪🇸';
+      // ignore: unreachable_switch_default
       default:
         return '🇺🇸';
     }
@@ -42,6 +45,7 @@ extension LanguageExtension on Language {
         return const Locale('en', "US");
       case Language.spanish:
         return const Locale('es', "ES");
+      // ignore: unreachable_switch_default
       default:
         return const Locale('en', "US");
     }

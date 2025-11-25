@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/controllers/LoginPedido.dart';
+import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/models/Pedido.dart';
+import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class GestionPedidos extends StatefulWidget {
   const GestionPedidos({super.key});
@@ -78,10 +80,17 @@ class _GestionPedidosState extends State<GestionPedidos> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestión de Pedidos'),
+        title: Text(l10n.manageOrders),
         backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: buildLanguageDropdown(),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -170,7 +179,7 @@ class _GestionPedidosState extends State<GestionPedidos> {
                 ),
               ),
               onPressed: () => Navigator.pop(context),
-              child: const Text('Volver'),
+              child: Text(l10n.returnText),
             ),
           ],
         ),

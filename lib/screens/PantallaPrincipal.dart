@@ -49,9 +49,12 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         );
       } else {
         print("Usuario o contraseña incorrectos");
+        // ignore: unused_local_variable
         const snackBar = null;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.invalidCredentials)),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.invalidCredentials),
+          ),
         );
       }
     } else {
