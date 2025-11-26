@@ -33,7 +33,12 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
       appBar: AppBar(
         title: Text(l10n.usersManagementTitle),
         backgroundColor: Appcolor.backgroundColor,
-        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: buildLanguageDropdown(),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -70,7 +75,8 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => EditarUsuario(user: user),
+                                    builder: (context) =>
+                                        EditarUsuario(user: user),
                                   ),
                                 ).then((edited) {
                                   if (edited == true) {
@@ -79,7 +85,9 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('${l10n.updatedUserPrefix} ${user.getName}'),
+                                        content: Text(
+                                          '${l10n.updatedUserPrefix} ${user.getName}',
+                                        ),
                                       ),
                                     );
                                   }
@@ -93,14 +101,18 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                   context: context,
                                   builder: (context) => AlertDialog(
                                     title: Text(l10n.confirmDeletionTitle),
-                                    content: Text('${l10n.confirmDeletionQuestionUserPrefix} ${user.getName}?'),
+                                    content: Text(
+                                      '${l10n.confirmDeletionQuestionUserPrefix} ${user.getName}?',
+                                    ),
                                     actions: [
                                       TextButton(
-                                        onPressed: () => Navigator.of(context).pop(false),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
                                         child: Text(l10n.cancel),
                                       ),
                                       TextButton(
-                                        onPressed: () => Navigator.of(context).pop(true),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
                                         child: Text(l10n.delete),
                                       ),
                                     ],
@@ -112,7 +124,11 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                     users = LogicaUsuarios.getListaUsuarios();
                                   });
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('${l10n.delete} ${user.getName}')),
+                                    SnackBar(
+                                      content: Text(
+                                        '${l10n.delete} ${user.getName}',
+                                      ),
+                                    ),
                                   );
                                 }
                               },
@@ -131,7 +147,9 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                                 setState(() {
                                   users = LogicaUsuarios.getListaUsuarios();
                                 });
-                                final updated = users.firstWhere((u) => u.name == user.name);
+                                final updated = users.firstWhere(
+                                  (u) => u.name == user.name,
+                                );
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -168,7 +186,10 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                   });
                 });
               },
-              child: Text(l10n.createUser, style: const TextStyle(color: Colors.white)),
+              child: Text(
+                l10n.createUser,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
@@ -179,7 +200,10 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(l10n.returnText, style: const TextStyle(color: Colors.white)),
+              child: Text(
+                l10n.returnText,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/controllers/LoginPedido.dart';
 import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/models/Pedido.dart';
@@ -84,7 +85,7 @@ class _GestionPedidosState extends State<GestionPedidos> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.manageOrders),
-        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+        backgroundColor: Appcolor.backgroundColor,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8),
@@ -123,7 +124,10 @@ class _GestionPedidosState extends State<GestionPedidos> {
 
                           // Eliminar
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Appcolor.backgroundColor,
+                            ),
                             onPressed: () async {
                               final confirm = await showDialog<bool>(
                                 context: context,
@@ -173,10 +177,7 @@ class _GestionPedidosState extends State<GestionPedidos> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: BorderSide(
-                  color: Color.fromARGB(255, 230, 14, 14),
-                  width: 1.5,
-                ),
+                side: BorderSide(color: Appcolor.backgroundColor, width: 1.5),
               ),
               onPressed: () => Navigator.pop(context),
               child: Text(l10n.returnText),

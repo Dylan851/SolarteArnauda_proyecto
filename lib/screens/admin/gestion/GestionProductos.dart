@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/models/Productos.dart';
 import 'package:flutter_application/screens/admin/editarInformacionAdmin/EditarProducto.dart';
 import 'package:flutter_application/services/LogicaProductos.dart';
@@ -26,6 +28,39 @@ class _GestionProductosState extends State<GestionProductos> {
     setState(() {
       productos = LogicaProductos.getListaProductos();
     });
+  }
+
+  Widget _buildProductImage(String imagePath) {
+    // Si es una ruta de assets
+    if (imagePath.startsWith('assets/')) {
+      return Image.asset(
+        imagePath,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            const Icon(Icons.image_not_supported),
+      );
+    }
+    // Si es una URL (Chrome, web, etc.)
+    else if (imagePath.startsWith('http://') ||
+        imagePath.startsWith('https://')) {
+      return Image.network(
+        imagePath,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            const Icon(Icons.image_not_supported),
+      );
+    }
+    // Si es una ruta local (Drag and Drop, cámara, galería)
+    else {
+      return kIsWeb
+          ? Image.network(imagePath, fit: BoxFit.cover)
+          : Image.file(
+              File(imagePath),
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.image_not_supported),
+            );
+    }
   }
 
   void _crearProducto() async {
@@ -60,8 +95,13 @@ class _GestionProductosState extends State<GestionProductos> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.productsManagementTitle),
-        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
-        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
+        backgroundColor: Appcolor.backgroundColor,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: buildLanguageDropdown(),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -78,25 +118,9 @@ class _GestionProductosState extends State<GestionProductos> {
                           ? SizedBox(
                               width: 50,
                               height: 50,
-                              child: kIsWeb
-                                  ? Image.network(
-                                      producto.getImagenProducto!,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              const Icon(
-                                                Icons.image_not_supported,
-                                              ),
-                                    )
-                                  : Image.network(
-                                      producto.getImagenProducto!,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              const Icon(
-                                                Icons.image_not_supported,
-                                              ),
-                                    ),
+                              child: _buildProductImage(
+                                producto.getImagenProducto!,
+                              ),
                             )
                           : const CircleAvatar(child: Icon(Icons.shopping_bag)),
                       title: Text(producto.getNombre),
@@ -108,7 +132,7 @@ class _GestionProductosState extends State<GestionProductos> {
                             '\$${producto.getPrecio.toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.green,
+                              color: Appcolor.accent,
                             ),
                           ),
                         ],
@@ -119,7 +143,7 @@ class _GestionProductosState extends State<GestionProductos> {
                           IconButton(
                             icon: const Icon(
                               Icons.edit,
-                              color: const Color.fromARGB(255, 230, 14, 14),
+                              color: Appcolor.backgroundColor,
                             ),
                             onPressed: () async {
                               final result = await Navigator.push(
@@ -142,38 +166,53 @@ class _GestionProductosState extends State<GestionProductos> {
                                 _cargarProductos();
                                 if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(l10n.productUpdated)),
+                                    SnackBar(
+                                      content: Text(l10n.productUpdated),
+                                    ),
                                   );
                                 }
                               }
                             },
                           ),
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Appcolor.backgroundColor,
+                            ),
                             onPressed: () async {
                               final confirm = await showDialog<bool>(
                                 context: context,
                                 builder: (context) => AlertDialog(
                                   title: Text(l10n.confirmDeletionTitle),
-                                  content: Text('${l10n.deleteProductQuestionPrefix} "${producto.getNombre}"?'),
+                                  content: Text(
+                                    '${l10n.deleteProductQuestionPrefix} "${producto.getNombre}"?',
+                                  ),
                                   actions: [
                                     TextButton(
-                                      onPressed: () => Navigator.of(context).pop(false),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
                                       child: Text(l10n.cancel),
                                     ),
                                     TextButton(
-                                      onPressed: () => Navigator.of(context).pop(true),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
                                       child: Text(l10n.delete),
                                     ),
                                   ],
                                 ),
                               );
                               if (confirm == true) {
-                                LogicaProductos.eliminarProducto(producto.getNombre);
+                                LogicaProductos.eliminarProducto(
+                                  producto.getNombre,
+                                );
                                 _cargarProductos();
                                 if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('${l10n.delete} "${producto.getNombre}"')),
+                                    SnackBar(
+                                      content: Text(
+                                        '${l10n.delete} "${producto.getNombre}"',
+                                      ),
+                                    ),
                                   );
                                 }
                               }
@@ -182,7 +221,7 @@ class _GestionProductosState extends State<GestionProductos> {
                           Icon(
                             Icons.circle,
                             color: producto.getDisponible
-                                ? Colors.green
+                                ? Appcolor.accent
                                 : Colors.grey,
                             size: 12,
                           ),
@@ -199,7 +238,7 @@ class _GestionProductosState extends State<GestionProductos> {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
                 side: const BorderSide(
-                  color: const Color.fromARGB(255, 230, 14, 14),
+                  color: Appcolor.backgroundColor,
                   width: 1.5,
                 ),
               ),
@@ -211,7 +250,7 @@ class _GestionProductosState extends State<GestionProductos> {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
                 side: const BorderSide(
-                  color: const Color.fromARGB(255, 230, 14, 14),
+                  color: Appcolor.backgroundColor,
                   width: 1.5,
                 ),
               ),

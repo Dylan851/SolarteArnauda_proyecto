@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application/config/utils/Camera.dart';
@@ -45,6 +46,24 @@ class _EditarProductoState extends State<EditarProducto> {
     super.dispose();
   }
 
+  Widget _buildImage(String imagePath) {
+    // Si es una ruta de assets
+    if (imagePath.startsWith('assets/')) {
+      return Image.asset(imagePath, fit: BoxFit.cover);
+    }
+    // Si es una URL (Chrome, web, etc.)
+    else if (imagePath.startsWith('http://') ||
+        imagePath.startsWith('https://')) {
+      return Image.network(imagePath, fit: BoxFit.cover);
+    }
+    // Si es una ruta local (Drag and Drop, cámara, galería)
+    else {
+      return kIsWeb
+          ? Image.network(imagePath, fit: BoxFit.cover)
+          : Image.file(File(imagePath), fit: BoxFit.cover);
+    }
+  }
+
   void _guardar() {
     if (_nombreController.text.isEmpty ||
         _descripcionController.text.isEmpty ||
@@ -65,12 +84,21 @@ class _EditarProductoState extends State<EditarProducto> {
       return;
     }
 
+    if (imageUrl == null || imageUrl!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Debes seleccionar una imagen para el producto"),
+        ),
+      );
+      return;
+    }
+
     // Retornar los datos del producto
     final productData = {
       'nombre': _nombreController.text,
       'descripcion': _descripcionController.text,
       'precio': precio,
-      'imageUrl': imageUrl,
+      'imagenProducto': imageUrl,
       'disponible': _disponible,
     };
 
@@ -131,9 +159,7 @@ class _EditarProductoState extends State<EditarProducto> {
                       child: SizedBox(
                         width: 50,
                         height: 50,
-                        child: imageUrl!.startsWith('assets/')
-                            ? Image.asset(imageUrl!, fit: BoxFit.cover)
-                            : Image.file(File(imageUrl!), fit: BoxFit.cover),
+                        child: _buildImage(imageUrl!),
                       ),
                     ),
                   const Spacer(),

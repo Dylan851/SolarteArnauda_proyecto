@@ -14,19 +14,19 @@ class Music {
 
       await audioPlayer.stop();
       await audioPlayer.release();
-      
+
       if (kIsWeb) {
         // Web: use absolute path from web root
-        await audioPlayer.setSource(UrlSource('/music/songRonnie.mp3'));
+        await audioPlayer.setSource(UrlSource('assets/music/songRonnie.mp3'));
       } else {
         // Mobile / Desktop: NO leading slash for AssetSource
-        await audioPlayer.setSource(AssetSource('music/songRonnie.mp3'));
+        await audioPlayer.setSource(AssetSource('assets/music/songRonnie.mp3'));
       }
-      
+
       await audioPlayer.setReleaseMode(ReleaseMode.loop);
       await audioPlayer.setVolume(0.5);
       await audioPlayer.resume();
-      
+
       _isPlaying = true;
       print("Música iniciada exitosamente");
     } catch (e) {
@@ -34,7 +34,7 @@ class Music {
       _isPlaying = false;
     }
   }
-  
+
   static Future<void> stopMusic() async {
     try {
       await audioPlayer.stop();
