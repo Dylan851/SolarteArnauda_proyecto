@@ -64,7 +64,18 @@ class _EditarUsuarioGoogleState extends State<EditarUsuarioGoogle> {
         isAdmin: false,
       );
 
-      LogicaUsuarios.anadirUsuarios(newUser);
+      // Actualizar en lugar de agregar
+      LogicaUsuarios.actualizarUsuario(
+        widget.user.getName,
+        _generoSelecionado,
+        _nombreController.text,
+        widget.user.getPassword ?? '',
+        int.tryParse(_edadController.text),
+        photoPath,
+        _lugarNacimiento,
+        false,
+      );
+
       usuarioActual = newUser;
 
       ScaffoldMessenger.of(context).showSnackBar(

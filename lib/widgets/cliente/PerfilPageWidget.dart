@@ -4,7 +4,6 @@ import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/screens/cliente/editarUsuarioCliente.dart';
-import 'package:flutter_application/screens/cliente/editarUsuarioGoogle.dart';
 
 class PerfilPageWidget extends StatefulWidget {
   final VoidCallback onContacto;
@@ -24,6 +23,12 @@ class _PerfilPageWidgetState extends State<PerfilPageWidget> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
+    // Detectar si es usuario de Google
+    final isGoogleUser =
+        usuarioActual?.getPassword == null ||
+        (usuarioActual?.getPassword?.isEmpty ?? true);
+
     return Card(
       child: Center(
         child: Column(
@@ -53,9 +58,11 @@ class _PerfilPageWidgetState extends State<PerfilPageWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 300.0),
               child: ElevatedButton(
-                onPressed: _editarUsuarioCliente,
+                onPressed: isGoogleUser ? null : _editarUsuarioCliente,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Appcolor.backgroundColor,
+                  backgroundColor: isGoogleUser
+                      ? Colors.grey
+                      : Appcolor.backgroundColor,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -63,7 +70,9 @@ class _PerfilPageWidgetState extends State<PerfilPageWidget> {
                     const Icon(Icons.person, color: Colors.white),
                     const SizedBox(width: 10),
                     Text(
-                      l10n.editUser,
+                      isGoogleUser
+                          ? "${l10n.editUser} (No disponible)"
+                          : l10n.editUser,
                       style: const TextStyle(color: Colors.white),
                     ),
                   ],
@@ -77,16 +86,11 @@ class _PerfilPageWidgetState extends State<PerfilPageWidget> {
   }
 
   void _editarUsuarioCliente() async {
-    // Detectar si es usuario de Google: verificar si la contraseña es vacía o nula
-    final isGoogleUser = (usuarioActual?.getPassword?.isEmpty ?? true);
-
-    final screen = isGoogleUser
-        ? EditarUsuarioGoogle(user: usuarioActual!)
-        : EditarUsuarioCliente(user: usuarioActual!);
-
     final updatedUser = await Navigator.push<AppUser>(
       context,
-      MaterialPageRoute(builder: (context) => screen),
+      MaterialPageRoute(
+        builder: (context) => EditarUsuarioCliente(user: usuarioActual!),
+      ),
     );
 
     if (updatedUser != null) {
