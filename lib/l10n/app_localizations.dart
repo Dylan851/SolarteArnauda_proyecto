@@ -535,6 +535,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sing in with Google'**
   String get googleLogin;
+
+  /// No description provided for @stock.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock'**
+  String get stock;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
 }
 
 class _AppLocalizationsDelegate

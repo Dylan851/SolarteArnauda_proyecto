@@ -3,8 +3,9 @@ import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/controllers/CompraController.dart';
 import 'package:flutter_application/controllers/LoginProductos.dart';
+import 'package:flutter_application/controllers/CarritoController.dart';
 import 'package:flutter_application/models/User.dart';
-import 'package:flutter_application/screens/cliente/contactoCliente.dart';
+import 'package:flutter_application/screens/cliente/contacto.dart';
 import 'package:flutter_application/screens/cliente/editarUsuarioCliente.dart';
 import 'package:flutter_application/widgets/cliente/PedidosPageWidget.dart';
 import 'package:flutter_application/widgets/cliente/PerfilPageWidget.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_application/widgets/cliente/ResumenCompraDialog.dart';
 import 'package:flutter_application/widgets/drawerGeneral.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 import 'package:flutter_application/l10n/app_localizations.dart';
+import 'package:flutter_application/services/LogicaProductos.dart';
 
 class PantallaSecundaria extends StatefulWidget {
   const PantallaSecundaria({super.key});
@@ -24,7 +26,38 @@ class PantallaSecundaria extends StatefulWidget {
 class _PantallaSecundariaState extends State<PantallaSecundaria> {
   int currentPageIndex = 0;
 
+  bool _validarStock(List productos) {
+    for (int i = 0; i < productos.length; i++) {
+      final cantidad = CarritoController.obtenerCantidad(i);
+      final stock = productos[i]['stock'] ?? 0;
+      if (cantidad > stock) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   void _realizarCompra(List productos) {
+    if (!_validarStock(productos)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("La cantidad solicitada excede el stock disponible"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Restar el stock de cada producto comprado
+    for (int i = 0; i < productos.length; i++) {
+      final cantidad = CarritoController.obtenerCantidad(i);
+      if (cantidad > 0) {
+        final producto = LogicaProductos.getListaProductos()[i];
+        final nuevoStock = producto.getStock - cantidad;
+        producto.setStock = nuevoStock;
+      }
+    }
+
     CompraController.realizarCompra(productos);
     setState(() {});
 
@@ -47,9 +80,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
   void _contactoCliente() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => contactoCliente(user: usuarioActual!),
-      ),
+      MaterialPageRoute(builder: (context) => contacto(user: usuarioActual!)),
     );
   }
 
@@ -70,8 +101,20 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final productos = LoginProductos.recorrerProductos();
+    var productos = LoginProductos.recorrerProductos();
+
+    // Asegurar que todos los productos tengan stock
+    productos = productos.map((p) {
+      p['stock'] = p['stock'] ?? 0;
+      return p;
+    }).toList();
+
     final l10n = AppLocalizations.of(context)!;
+
+    // Debug: imprime los productos para verificar que tengan stock
+    for (var p in productos) {
+      print('Producto: ${p['nombre']}, Stock: ${p['stock']}');
+    }
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -101,7 +144,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
         drawer: const drawerGeneral(),
         appBar: AppBar(
           backgroundColor: Appcolor.backgroundColor,
-          title: Text("${l10n.welcome} ${usuarioActual?.name}"),
+          title: Text("${l10n.welcome} ${usuarioActual?.name ?? l10n.user}"),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 8),

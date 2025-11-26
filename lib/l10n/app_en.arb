@@ -72,5 +72,7 @@
   "unblockedUserPrefix": "Unblocked:",
   "createUser": "Create User",
   "createProduct": "Create Product",
-  "googleLogin": "Sing in with Google"
+  "googleLogin": "Sing in with Google",
+  "stock":"Stock",
+  "user":"User"
 }

@@ -76,6 +76,7 @@ class _GestionProductosState extends State<GestionProductos> {
         precio: result['precio'],
         imagenProducto: result['imagenProducto'],
         disponible: result['disponible'],
+        stock: result['stock'] ?? 0,
       );
 
       LogicaProductos.agregarProducto(newProduct);
@@ -135,6 +136,13 @@ class _GestionProductosState extends State<GestionProductos> {
                               color: Appcolor.accent,
                             ),
                           ),
+                          Text(
+                            '${l10n.stock}: ${producto.getStock ?? 0}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
                         ],
                       ),
                       trailing: Row(
@@ -162,6 +170,7 @@ class _GestionProductosState extends State<GestionProductos> {
                                   result['precio'],
                                   result['imagenProducto'],
                                   result['disponible'],
+                                  result['stock'] ?? 0,
                                 );
                                 _cargarProductos();
                                 if (mounted) {

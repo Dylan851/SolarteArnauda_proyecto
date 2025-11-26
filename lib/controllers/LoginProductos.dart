@@ -10,6 +10,7 @@ class LoginProductos {
         'precio': producto.getPrecio,
         'imagenProducto': producto.getImagenProducto,
         'disponible': producto.getDisponible,
+        'stock': producto.getStock ?? 0,
       });
     }
     return detalles;

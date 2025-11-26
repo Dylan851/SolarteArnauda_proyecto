@@ -8,6 +8,7 @@ class LogicaProductos {
           "Energía explosiva y máxima concentración para tus entrenamientos más intensos. Ideal para quienes buscan romper sus límites.",
       precio: 10.0,
       imagenProducto: "assets/images/imagenesProductos/preEntrenoCalavera.png",
+      stock: 0,
     ),
     Productos(
       nombre: "Pre Entreno Goku",
@@ -15,6 +16,7 @@ class LogicaProductos {
           "Despierta tu poder interior con una fórmula avanzada que aumenta fuerza, enfoque y resistencia. ¡Entrena como un verdadero guerrero!",
       precio: 20.0,
       imagenProducto: "assets/images/imagenesProductos/preEntrenoGoku.png",
+      stock: 0,
     ),
     Productos(
       nombre: "Pre Entreno Gorilla",
@@ -22,6 +24,7 @@ class LogicaProductos {
           "Potencia tu rendimiento con una dosis extrema de energía y bombeo muscular. Perfecto para sesiones de alto rendimiento.",
       precio: 30.0,
       imagenProducto: "assets/images/imagenesProductos/preGorilla.png",
+      stock: 0,
     ),
   ];
 
@@ -44,6 +47,7 @@ class LogicaProductos {
     double nuevoPrecio,
     String? nuevaImagen,
     bool nuevoDisponible,
+    int nuevoStock,
   ) {
     final producto = _listaProductos.firstWhere(
       (p) => p.nombre == nombreOriginal,
@@ -55,5 +59,6 @@ class LogicaProductos {
     producto.setPrecio = nuevoPrecio;
     producto.setImagenProducto = nuevaImagen;
     producto.setDisponible = nuevoDisponible;
+    producto.setStock = nuevoStock;
   }
 }
