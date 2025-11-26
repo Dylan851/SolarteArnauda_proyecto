@@ -246,25 +246,25 @@ class _GestionProductosState extends State<GestionProductos> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(
-                  color: Appcolor.backgroundColor,
-                  width: 1.5,
-                ),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: _crearProducto,
-              child: Text(l10n.createProduct),
+              child: Text(
+                l10n.createProduct,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(
-                  color: Appcolor.backgroundColor,
-                  width: 1.5,
-                ),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: () => Navigator.pop(context),
-              child: Text(l10n.returnText),
+              child: Text(
+                l10n.returnText,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),

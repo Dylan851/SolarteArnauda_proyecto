@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/Camera.dart';
 import 'package:flutter_application/models/Productos.dart';
 
@@ -237,16 +238,14 @@ class _EditarProductoState extends State<EditarProducto> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size(300, 40),
-                    backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                    backgroundColor: Appcolor.backgroundColor,
                   ),
                   onPressed: _guardar,
                   child: Text(
                     widget.producto == null
                         ? "Crear Producto"
                         : "Guardar Cambios",
-                    style: const TextStyle(
-                      color: const Color.fromARGB(255, 230, 14, 14),
-                    ),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -255,14 +254,12 @@ class _EditarProductoState extends State<EditarProducto> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size(300, 40),
-                    backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                    backgroundColor: Appcolor.backgroundColor,
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: const Text(
                     "Cancelar",
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 230, 14, 14),
-                    ),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),

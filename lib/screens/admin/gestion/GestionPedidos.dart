@@ -177,10 +177,13 @@ class _GestionPedidosState extends State<GestionPedidos> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: BorderSide(color: Appcolor.backgroundColor, width: 1.5),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: () => Navigator.pop(context),
-              child: Text(l10n.returnText),
+              child: Text(
+                l10n.returnText,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),

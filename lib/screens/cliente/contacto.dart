@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
-import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
@@ -11,7 +10,6 @@ class contacto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final usuario = usuarioActual;
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -25,65 +23,103 @@ class contacto extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // LOGO
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Appcolor.backgroundColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Icon(
+                  Icons.fitness_center,
+                  size: 60,
+                  color: Appcolor.backgroundColor,
+                ),
+              ),
+              const SizedBox(height: 20),
 
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // FOTO DE PERFIL
-            Image.asset(
-              usuario?.photoPath ?? 'assets/images/LogoUsuario.png',
-              width: 120,
-              height: 120,
-            ),
-            SizedBox(height: 20),
+              // NOMBRE EMPRESA
+              const Text(
+                "SolarteArnauda",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Appcolor.backgroundColor,
+                ),
+              ),
+              const Text(
+                "Suplementos Deportivos",
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+              const SizedBox(height: 40),
 
-            // NOMBRE DEL USUARIO
-            Text(
-              user.getName,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            // DATOS
-            infoItem("${l10n.password}:", user.getPassword),
-            infoItem(
-              "${l10n.gender}",
-              user.getGenero != null
-                  ? usuario!.genero.toString().split('.').last
-                  : l10n.noData,
-            ),
-            infoItem("${l10n.age}:", user.getEdad.toString()),
-            infoItem(
-              "${l10n.placeOfBirth}:",
-              user.getNacimiento ?? l10n.noData,
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(l10n.back),
-            ),
-          ],
+              // INFORMACIÓN
+              _buildContactInfo(Icons.email, "info@solartearnuda.com"),
+              const SizedBox(height: 15),
+              _buildContactInfo(Icons.phone, "+34 123 456 789"),
+              const SizedBox(height: 15),
+              _buildContactInfo(
+                Icons.location_on,
+                "Calle Principal 123, Madrid",
+              ),
+              const SizedBox(height: 15),
+              _buildContactInfo(Icons.schedule, "Lunes - Viernes 9:00-18:00"),
+              const SizedBox(height: 40),
+
+              // DESCRIPCIÓN
+              Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Appcolor.backgroundColor.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
+                  "SolarteArnauda es tu aliado en nutrición deportiva. "
+                  "Con más de 10 años de experiencia, ofrecemos suplementos "
+                  "de calidad para ayudarte a alcanzar tus objetivos fitness.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 13, height: 1.6),
+                ),
+              ),
+              const SizedBox(height: 40),
+
+              // BOTÓN VOLVER
+              ElevatedButton.icon(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Appcolor.backgroundColor,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 12,
+                  ),
+                ),
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                label: Text(
+                  l10n.back,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // FUNCION SIMPLE PARA MOSTRAR TEXTO BONITO
-  Widget infoItem(String titulo, String valor) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            titulo,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          SizedBox(width: 5),
-          Text(valor, style: TextStyle(fontSize: 16)),
-        ],
-      ),
+  Widget _buildContactInfo(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, color: Appcolor.backgroundColor, size: 22),
+        const SizedBox(width: 15),
+        Expanded(child: Text(text, style: const TextStyle(fontSize: 14))),
+      ],
     );
   }
 }
