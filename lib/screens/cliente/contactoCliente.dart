@@ -6,7 +6,7 @@ import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class contactoCliente extends StatelessWidget {
-  final User user;
+  final AppUser user;
   const contactoCliente({super.key, required this.user});
 
   @override
@@ -18,7 +18,12 @@ class contactoCliente extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Appcolor.backgroundColor,
         title: Text(l10n.contactTitle),
-        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: buildLanguageDropdown(),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

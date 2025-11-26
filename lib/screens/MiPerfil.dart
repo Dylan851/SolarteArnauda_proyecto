@@ -6,7 +6,7 @@ import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class Miperfil extends StatelessWidget {
-  final User user;
+  final AppUser user;
   const Miperfil({super.key, required this.user});
 
   @override
@@ -17,7 +17,12 @@ class Miperfil extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Appcolor.backgroundColor,
         title: Text(l10n.myProfileTitle),
-        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: buildLanguageDropdown(),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -47,7 +52,10 @@ class Miperfil extends StatelessWidget {
                   : l10n.noData,
             ),
             infoItem("${l10n.age}:", user.getEdad.toString()),
-            infoItem("${l10n.placeOfBirth}:", user.getNacimiento ?? l10n.noData),
+            infoItem(
+              "${l10n.placeOfBirth}:",
+              user.getNacimiento ?? l10n.noData,
+            ),
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),

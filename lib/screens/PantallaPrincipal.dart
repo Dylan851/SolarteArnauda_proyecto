@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/utils/globals.dart';
 import 'package:flutter_application/config/utils/music.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_application/screens/cliente/PantallaSecundariaCliente.da
 import 'package:flutter_application/screens/admin/AdminHome.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
+import 'package:flutter_application/controllers/user_controller.dart';
 
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({super.key});
@@ -19,6 +21,7 @@ class PantallaPrincipal extends StatefulWidget {
 class _PantallaPrincipalState extends State<PantallaPrincipal> {
   String nombre = "";
   String _contrasena = "";
+
   void _PantallaRegistros() {
     Navigator.push(
       context,
@@ -32,7 +35,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       if (usuario != null &&
           usuario.getPassword == _contrasena &&
           usuario.getIsAdmin == true) {
-        await Music.playMusic(); // Play music on admin login
+        await Music.playMusic();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const AdminHome()),
@@ -42,14 +45,13 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
       if (loginController.validarUsuario(nombre, _contrasena) == true) {
         usuarioActual = usuario ?? loginController.getUsuario(nombre);
-        await Music.playMusic(); // Play music on client login
+        await Music.playMusic();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const PantallaSecundaria()),
         );
       } else {
         print("Usuario o contraseña incorrectos");
-        // ignore: unused_local_variable
         const snackBar = null;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -118,16 +120,43 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                 ),
               ),
               SizedBox(height: 15),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(300, 40),
-                  backgroundColor: const Color.fromARGB(255, 230, 14, 14),
-                ),
-                onPressed: _validar,
-                child: Text(
-                  l10n.login,
-                  style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 150,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(150, 40),
+                        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                      ),
+                      onPressed: _validar,
+                      child: Text(
+                        l10n.login,
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Container(
+                    width: 150,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(150, 40),
+                        backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                      ),
+                      onPressed: _PantallaRegistros,
+                      child: Text(
+                        l10n.register,
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 10),
               ElevatedButton(
@@ -135,18 +164,29 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                   fixedSize: Size(300, 40),
                   backgroundColor: const Color.fromARGB(255, 230, 14, 14),
                 ),
-                onPressed: _PantallaRegistros,
+                onPressed: () async {
+                  final userCredential;
+                  if (kIsWeb) {
+                    userCredential = await UserController.signInWithGoogleWeb();
+                  } else {
+                    userCredential = await UserController.loginGoogle();
+                  }
+                  if (userCredential != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PantallaSecundaria(),
+                      ),
+                    );
+                  }
+                },
                 child: Text(
-                  l10n.register,
+                  l10n.googleLogin,
                   style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                 ),
               ),
               SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(300, 40),
-                  backgroundColor: const Color.fromARGB(255, 230, 14, 14),
-                ),
+              TextButton(
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -208,7 +248,11 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                 },
                 child: Text(
                   l10n.recoverPassword,
-                  style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                  style: TextStyle(
+                    color: Colors.blue, // Azul para el texto
+                    fontSize:
+                        16, // Ajusta el tamaño de la fuente si es necesario
+                  ),
                 ),
               ),
             ],

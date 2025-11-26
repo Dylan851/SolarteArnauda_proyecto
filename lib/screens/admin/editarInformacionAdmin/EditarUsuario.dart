@@ -8,7 +8,7 @@ import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:flutter_application/services/LogicaUsuarios.dart';
 
 class EditarUsuario extends StatefulWidget {
-  final User user;
+  final AppUser user;
 
   const EditarUsuario({super.key, required this.user});
 

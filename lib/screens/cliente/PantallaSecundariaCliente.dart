@@ -54,7 +54,7 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
   }
 
   void _editarUsuarioCliente() async {
-    final updatedUser = await Navigator.push<User>(
+    final updatedUser = await Navigator.push<AppUser>(
       context,
       MaterialPageRoute(
         builder: (context) => EditarUsuarioCliente(user: usuarioActual!),
@@ -102,7 +102,12 @@ class _PantallaSecundariaState extends State<PantallaSecundaria> {
         appBar: AppBar(
           backgroundColor: Appcolor.backgroundColor,
           title: Text("${l10n.welcome} ${usuarioActual?.name}"),
-          actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: buildLanguageDropdown(),
+            ),
+          ],
         ),
         body: <Widget>[
           ProductosPageWidget(

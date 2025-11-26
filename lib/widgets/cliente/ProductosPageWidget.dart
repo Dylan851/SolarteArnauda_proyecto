@@ -41,11 +41,11 @@ class ProductosPageWidget extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         child: Row(
                           children: [
-                            Image.asset(
+                            Image.network(
                               producto['imagenProducto'],
+                              fit: BoxFit.cover,
                               width: 70,
                               height: 70,
-                              fit: BoxFit.cover,
                             ),
                             const SizedBox(width: 10),
                             Expanded(
@@ -76,7 +76,9 @@ class ProductosPageWidget extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(Icons.remove_circle_outline),
                                   onPressed: () {
-                                    CarritoController.decrementarCantidad(index);
+                                    CarritoController.decrementarCantidad(
+                                      index,
+                                    );
                                     onCantidadChanged();
                                   },
                                 ),
@@ -84,7 +86,9 @@ class ProductosPageWidget extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(Icons.add_circle_outline),
                                   onPressed: () {
-                                    CarritoController.incrementarCantidad(index);
+                                    CarritoController.incrementarCantidad(
+                                      index,
+                                    );
                                     onCantidadChanged();
                                   },
                                 ),

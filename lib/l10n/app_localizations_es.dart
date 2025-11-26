@@ -220,4 +220,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get createUser => 'Crear Usuario';
+
+  @override
+  String get createProduct => 'Crear Producto';
+
+  @override
+  String get googleLogin => 'Iniciar con Google';
 }

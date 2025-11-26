@@ -70,5 +70,7 @@
   "gender": "Gender:",
   "blockedUserPrefix": "Blocked:",
   "unblockedUserPrefix": "Unblocked:",
-  "createUser": "Create User"
+  "createUser": "Create User",
+  "createProduct": "Create Product",
+  "googleLogin": "Sing in with Google"
 }

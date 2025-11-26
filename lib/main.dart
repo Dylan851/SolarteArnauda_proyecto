@@ -4,8 +4,11 @@ import 'package:flutter_application/locale_bloc/locale_bloc.dart';
 import 'package:flutter_application/screens/PantallaPrincipal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application/config/utils/lenguage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -15,9 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider<LocaleBloc>(create: (_) => LocaleBloc()),
-      ],
+      providers: [BlocProvider<LocaleBloc>(create: (_) => LocaleBloc())],
       child: BlocBuilder<LocaleBloc, LocaleState>(
         builder: (context, state) {
           return MaterialApp(

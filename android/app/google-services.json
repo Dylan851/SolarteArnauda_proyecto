@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "696099769430",
+    "project_id": "tiendapreentrenos",
+    "storage_bucket": "tiendapreentrenos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696099769430:android:0b49b1bd56edb677a33ff7",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696099769430-dibu3h49gbo339u0q9fmtm53g5pehq22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnQ145dY4uiMuhX1BHMlfcQVSFr6COfT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696099769430-dibu3h49gbo339u0q9fmtm53g5pehq22.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -243,7 +243,7 @@ class _GestionProductosState extends State<GestionProductos> {
                 ),
               ),
               onPressed: _crearProducto,
-              child: Text(l10n.createUser.replaceAll('Usuario', 'Producto')),
+              child: Text(l10n.createProduct),
             ),
             const SizedBox(height: 12),
             ElevatedButton(

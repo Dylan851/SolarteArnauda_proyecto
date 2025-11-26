@@ -523,6 +523,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create User'**
   String get createUser;
+
+  /// No description provided for @createProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Product'**
+  String get createProduct;
+
+  /// No description provided for @googleLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Sing in with Google'**
+  String get googleLogin;
 }
 
 class _AppLocalizationsDelegate

@@ -1,14 +1,16 @@
 import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LogicaUsuarios {
-  static final List<User> _listaUsuarios = [
-    User(name: "admin", password: "admin", isAdmin: true),
-    User(name: "dilan", password: "dilan"),
-    User(name: "miguel", password: "miguel"),
+  static final List<AppUser> _listaUsuarios = [
+    AppUser(name: "admin", password: "admin", isAdmin: true),
+    AppUser(name: "dilan", password: "dilan"),
+    AppUser(name: "miguel", password: "miguel"),
   ];
 
-  static void anadirUsuarios(User usuario) {
+  static void anadirUsuarios(AppUser usuario) {
     _listaUsuarios.add(usuario);
   }
 
@@ -38,7 +40,7 @@ class LogicaUsuarios {
     final index = _listaUsuarios.indexWhere((u) => u.name == nombreOriginal);
     if (index != -1) {
       final wasBlocked = _listaUsuarios[index].isBlocked;
-      _listaUsuarios[index] = User(
+      _listaUsuarios[index] = AppUser(
         name: nuevoNombre,
         password: nuevaContrasena,
         isAdmin: isAdmin,
@@ -51,7 +53,7 @@ class LogicaUsuarios {
     }
   }
 
-  static List<User> getListaUsuarios() {
+  static List<AppUser> getListaUsuarios() {
     return _listaUsuarios;
   }
 }

@@ -11,7 +11,7 @@ import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 class EditarUsuarioCliente extends StatefulWidget {
-  final User user;
+  final AppUser user;
 
   const EditarUsuarioCliente({super.key, required this.user});
 
@@ -86,23 +86,31 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
         final updatedUser = LogicaUsuarios.getListaUsuarios().firstWhere(
           (u) => u.name == _nombreController.text,
         );
-        
+
         usuarioActual = updatedUser;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.userUpdatedSuccessfully)),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.userUpdatedSuccessfully,
+            ),
+          ),
         );
 
         // Devolver el usuario actualizado
         Navigator.pop(context, updatedUser);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.passwordsNotEqual)),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.passwordsNotEqual),
+          ),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.fieldsEmptyNamePassword)),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.fieldsEmptyNamePassword),
+        ),
       );
     }
   }
@@ -114,7 +122,12 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
       appBar: AppBar(
         backgroundColor: Appcolor.backgroundColor,
         title: Text(l10n.editUserTitle),
-        actions: [Padding(padding: const EdgeInsets.only(right: 8), child: buildLanguageDropdown())],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: buildLanguageDropdown(),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
@@ -139,7 +152,9 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Text("${l10n.treatment.replaceAll(':', '')} ${l10n.mr}/${l10n.mrs}"),
+                      Text(
+                        "${l10n.treatment.replaceAll(':', '')} ${l10n.mr}/${l10n.mrs}",
+                      ),
                       const SizedBox(width: 20),
                       Radio<Genero>(
                         value: Genero.Sr,
@@ -280,7 +295,9 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                     controller: _edadController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      labelText: widget.user.getEdad == null ? l10n.age : "${l10n.age}",
+                      labelText: widget.user.getEdad == null
+                          ? l10n.age
+                          : "${l10n.age}",
                       border: const OutlineInputBorder(),
                     ),
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -333,7 +350,10 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                   backgroundColor: Appcolor.backgroundColor,
                 ),
                 onPressed: _guardar,
-                child: Text(l10n.save, style: const TextStyle(color: Colors.white)),
+                child: Text(
+                  l10n.save,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
@@ -342,7 +362,10 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
                   backgroundColor: Appcolor.backgroundColor,
                 ),
                 onPressed: () => Navigator.pop(context),
-                child: Text(l10n.cancel, style: const TextStyle(color: Colors.white)),
+                child: Text(
+                  l10n.cancel,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),

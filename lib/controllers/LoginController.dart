@@ -4,7 +4,7 @@ import 'package:flutter_application/models/User.dart';
 
 class loginController {
   static bool validarUsuario(String nombreIngresado, String passwordIngresado) {
-    for (User user in LogicaUsuarios.getListaUsuarios()) {
+    for (AppUser user in LogicaUsuarios.getListaUsuarios()) {
       if (user.getName == nombreIngresado &&
           user.getPassword == passwordIngresado) {
         return true;
@@ -13,7 +13,7 @@ class loginController {
     return false;
   }
 
-  static User? getUsuario(String nombre) {
+  static AppUser? getUsuario(String nombre) {
     for (var usuario in LogicaUsuarios.getListaUsuarios()) {
       if (usuario.name == nombre) {
         return usuario;
@@ -32,7 +32,7 @@ class loginController {
     bool isAdmin = false,
   ]) {
     LogicaUsuarios.anadirUsuarios(
-      User(
+      AppUser(
         genero: generoIngresado,
         name: nombreIngresado,
         password: passwordIngresado,

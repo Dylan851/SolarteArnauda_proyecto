@@ -1,6 +1,6 @@
 import 'package:flutter_application/screens/PantallaRegistros.dart';
 
-class User {
+class AppUser {
   final String name;
   final String password;
   Genero? genero;
@@ -8,7 +8,7 @@ class User {
   String? nacimiento;
   String? photoPath;
   bool isAdmin;
-  User({
+  AppUser({
     required this.name,
     required this.password,
     this.isAdmin = false,
