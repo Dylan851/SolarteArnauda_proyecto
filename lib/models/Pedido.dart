@@ -1,9 +1,10 @@
+// Modelo de pedido/compra realizada por un usuario
 class Pedido {
   final int id;
   final String Usuario;
-  final List<Map<String, dynamic>> productos;
-  final double total;
-  String estado; // en_tramite, enviado, denegado
+  final List<Map<String, dynamic>> productos; // Lista de productos comprados
+  final double total; // Monto total del pedido
+  String estado; // Estados posibles: en_tramite, enviado, denegado
   final DateTime fecha;
 
   Pedido({
@@ -14,7 +15,8 @@ class Pedido {
     this.estado = "en_tramite",
     required this.fecha,
   });
-  // Getters
+
+  // Getters para acceder a los datos del pedido
   int get getIdPedido => id;
   String get getId => Usuario;
   List<Map<String, dynamic>> get getProductos => productos;

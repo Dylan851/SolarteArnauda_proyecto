@@ -10,6 +10,7 @@ import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
 enum Genero { Sr, Sra }
 
+// Pantalla de registro de nuevos usuarios
 class PantallaRegistros extends StatefulWidget {
   const PantallaRegistros({super.key});
 

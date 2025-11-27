@@ -14,6 +14,7 @@ import 'package:flutter_application/widgets/drawerGeneral.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 import 'package:flutter_application/l10n/app_localizations.dart';
 
+// Pantalla principal del cliente con acceso a productos, perfil, pedidos y contacto
 class PantallaSecundaria extends StatefulWidget {
   const PantallaSecundaria({super.key});
 

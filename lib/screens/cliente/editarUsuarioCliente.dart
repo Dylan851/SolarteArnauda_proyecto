@@ -10,6 +10,7 @@ import 'package:flutter_application/services/LogicaUsuarios.dart';
 import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
+// Pantalla para editar los datos del perfil del usuario cliente
 class EditarUsuarioCliente extends StatefulWidget {
   final AppUser user;
 

@@ -5,6 +5,7 @@ import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
+// Pantalla de contacto que muestra información de atención al cliente
 class contactoCliente extends StatelessWidget {
   final AppUser user;
   const contactoCliente({super.key, required this.user});

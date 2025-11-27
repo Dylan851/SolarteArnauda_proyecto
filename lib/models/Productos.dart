@@ -1,3 +1,4 @@
+// Modelo de producto para la tienda
 class Productos {
   String nombre;
   String descripcion;
@@ -15,6 +16,7 @@ class Productos {
     this.cantidad = 0,
   });
 
+  // Getters para acceder a los datos del producto
   String get getNombre => nombre;
   String get getDescripcion => descripcion;
   double get getPrecio => precio;
@@ -22,7 +24,7 @@ class Productos {
   bool get getDisponible => disponible;
   int get getCantidad => cantidad;
 
-  // Setters para la edición
+  // Setters para modificar los datos del producto
   set setNombre(String value) => nombre = value;
   set setDescripcion(String value) => descripcion = value;
   set setPrecio(double value) => precio = value;

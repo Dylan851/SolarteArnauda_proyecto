@@ -96,7 +96,8 @@ class _GestionUsuariosState extends State<GestionUsuarios> {
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () async {
+                              // Deshabilitar eliminación del usuario admin
+                              onPressed: (user.name == "admin") ? null : () async {
                                 final confirm = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(

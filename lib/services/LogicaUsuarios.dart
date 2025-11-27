@@ -3,21 +3,30 @@ import 'package:flutter_application/screens/PantallaRegistros.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+// Servicio que gestiona la lógica de usuarios en la aplicación
 class LogicaUsuarios {
+  // Lista local de usuarios registrados en el sistema
   static final List<AppUser> _listaUsuarios = [
     AppUser(name: "admin", password: "admin", isAdmin: true),
     AppUser(name: "dilan", password: "dilan"),
     AppUser(name: "miguel", password: "miguel"),
   ];
 
+  // Añade un nuevo usuario a la lista
   static void anadirUsuarios(AppUser usuario) {
     _listaUsuarios.add(usuario);
   }
 
+  // Elimina un usuario por su nombre (no permite eliminar el usuario admin)
   static void eliminarUsuario(String nombre) {
+    // Proteger al usuario admin de ser eliminado
+    if (nombre == "admin") {
+      return;
+    }
     _listaUsuarios.removeWhere((u) => u.name == nombre);
   }
 
+  // Bloquea o desbloquea un usuario
   static void toggleBloqueoUsuario(String nombre) {
     for (var u in _listaUsuarios) {
       if (u.name == nombre) {
@@ -27,6 +36,7 @@ class LogicaUsuarios {
     }
   }
 
+  // Actualiza los datos de un usuario existente
   static void actualizarUsuario(
     String nombreOriginal,
     Genero? genero,
@@ -53,6 +63,7 @@ class LogicaUsuarios {
     }
   }
 
+  // Retorna la lista completa de usuarios
   static List<AppUser> getListaUsuarios() {
     return _listaUsuarios;
   }

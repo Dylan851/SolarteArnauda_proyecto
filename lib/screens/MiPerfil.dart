@@ -5,6 +5,7 @@ import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/l10n/app_localizations.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 
+// Pantalla que muestra la información del perfil del usuario
 class Miperfil extends StatelessWidget {
   final AppUser user;
   const Miperfil({super.key, required this.user});

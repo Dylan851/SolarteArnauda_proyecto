@@ -11,6 +11,7 @@ import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/widgets/buildLanguageSwitch.dart';
 import 'package:flutter_application/controllers/user_controller.dart';
 
+// Pantalla principal de login y autenticación de usuarios
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({super.key});
 

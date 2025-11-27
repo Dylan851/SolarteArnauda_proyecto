@@ -1,6 +1,8 @@
 import 'package:flutter_application/models/Productos.dart';
 
+// Servicio que gestiona el catálogo de productos
 class LogicaProductos {
+  // Catálogo inicial de productos disponibles
   static final List<Productos> _listaProductos = [
     Productos(
       nombre: "Pre Entreno Calavera",
@@ -25,18 +27,22 @@ class LogicaProductos {
     ),
   ];
 
+  // Retorna la lista completa de productos
   static List<Productos> getListaProductos() {
     return _listaProductos;
   }
 
+  // Agrega un nuevo producto al catálogo
   static void agregarProducto(Productos producto) {
     _listaProductos.add(producto);
   }
 
+  // Elimina un producto del catálogo por nombre
   static void eliminarProducto(String nombre) {
     _listaProductos.removeWhere((p) => p.nombre == nombre);
   }
 
+  // Actualiza los datos de un producto existente
   static void actualizarProducto(
     String nombreOriginal,
     String nuevoNombre,
