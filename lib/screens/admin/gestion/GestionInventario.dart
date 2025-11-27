@@ -108,6 +108,13 @@ class _GestionInventarioState extends State<GestionInventario> {
                               color: Appcolor.accent,
                             ),
                           ),
+                          Text(
+                            '${l10n.stock}: ${producto.getStock}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
                         ],
                       ),
                       isThreeLine: true,
@@ -116,17 +123,17 @@ class _GestionInventarioState extends State<GestionInventario> {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              int nuevaCantidad = producto.getCantidad;
+                              int nuevoStock = producto.getStock;
                               return AlertDialog(
                                 title: Text(l10n.modifyQuantity),
                                 content: TextFormField(
-                                  initialValue: producto.getCantidad.toString(),
+                                  initialValue: producto.getStock.toString(),
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
-                                    labelText: l10n.quantity,
+                                    labelText: l10n.stock,
                                   ),
                                   onChanged: (value) {
-                                    nuevaCantidad = int.tryParse(value) ?? 0;
+                                    nuevoStock = int.tryParse(value) ?? 0;
                                   },
                                 ),
                                 actions: [
@@ -139,7 +146,7 @@ class _GestionInventarioState extends State<GestionInventario> {
                                   ElevatedButton(
                                     onPressed: () {
                                       setState(() {
-                                        producto.setCantidad = nuevaCantidad;
+                                        producto.setStock = nuevoStock;
                                       });
                                       Navigator.of(context).pop();
                                     },
@@ -171,13 +178,13 @@ class _GestionInventarioState extends State<GestionInventario> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(
-                  color: Appcolor.backgroundColor,
-                  width: 1.5,
-                ),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: () => Navigator.pop(context),
-              child: Text(l10n.returnText),
+              child: Text(
+                l10n.returnText,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),

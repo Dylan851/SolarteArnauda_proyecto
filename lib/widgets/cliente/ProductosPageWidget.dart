@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/controllers/CarritoController.dart';
@@ -14,6 +16,34 @@ class ProductosPageWidget extends StatelessWidget {
     required this.onMostrarResumen,
     required this.onCantidadChanged,
   });
+
+  Widget _buildProductImage(String imagePath) {
+    if (imagePath.startsWith('assets/')) {
+      return Image.asset(
+        imagePath,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            const Icon(Icons.image_not_supported),
+      );
+    } else if (imagePath.startsWith('http://') ||
+        imagePath.startsWith('https://')) {
+      return Image.network(
+        imagePath,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            const Icon(Icons.image_not_supported),
+      );
+    } else {
+      return kIsWeb
+          ? Image.network(imagePath, fit: BoxFit.cover)
+          : Image.file(
+              File(imagePath),
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.image_not_supported),
+            );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +71,12 @@ class ProductosPageWidget extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         child: Row(
                           children: [
-                            Image.network(
-                              producto['imagenProducto'],
-                              fit: BoxFit.cover,
+                            SizedBox(
                               width: 70,
                               height: 70,
+                              child: _buildProductImage(
+                                producto['imagenProducto'],
+                              ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
@@ -68,6 +99,16 @@ class ProductosPageWidget extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  Text(
+                                    '${l10n.stock}: ${producto['stock'] ?? 0}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: (producto['stock'] ?? 0) > 0
+                                          ? Colors.blue
+                                          : Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -75,22 +116,26 @@ class ProductosPageWidget extends StatelessWidget {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.remove_circle_outline),
-                                  onPressed: () {
-                                    CarritoController.decrementarCantidad(
-                                      index,
-                                    );
-                                    onCantidadChanged();
-                                  },
+                                  onPressed: cantidad > 0
+                                      ? () {
+                                          CarritoController.decrementarCantidad(
+                                            index,
+                                          );
+                                          onCantidadChanged();
+                                        }
+                                      : null,
                                 ),
                                 Text('$cantidad'),
                                 IconButton(
                                   icon: const Icon(Icons.add_circle_outline),
-                                  onPressed: () {
-                                    CarritoController.incrementarCantidad(
-                                      index,
-                                    );
-                                    onCantidadChanged();
-                                  },
+                                  onPressed: cantidad < (producto['stock'] ?? 0)
+                                      ? () {
+                                          CarritoController.incrementarCantidad(
+                                            index,
+                                          );
+                                          onCantidadChanged();
+                                        }
+                                      : null,
                                 ),
                               ],
                             ),

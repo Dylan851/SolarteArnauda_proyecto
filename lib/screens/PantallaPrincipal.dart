@@ -19,9 +19,30 @@ class PantallaPrincipal extends StatefulWidget {
   State<PantallaPrincipal> createState() => _PantallaPrincipalState();
 }
 
-class _PantallaPrincipalState extends State<PantallaPrincipal> {
+class _PantallaPrincipalState extends State<PantallaPrincipal>
+    with WidgetsBindingObserver {
   String nombre = "";
   String _contrasena = "";
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    Music.stopMusic();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      Music.stopMusic();
+    }
+  }
 
   void _PantallaRegistros() {
     Navigator.push(

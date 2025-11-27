@@ -226,4 +226,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get googleLogin => 'Iniciar con Google';
+
+  @override
+  String get stock => 'existencias';
+
+  @override
+  String get user => 'Usuario';
 }

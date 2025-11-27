@@ -1,7 +1,5 @@
 import 'package:flutter_application/models/User.dart';
 import 'package:flutter_application/screens/PantallaRegistros.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 // Servicio que gestiona la lógica de usuarios en la aplicación
 class LogicaUsuarios {

@@ -33,16 +33,39 @@ class ResumenCompraDialog extends StatelessWidget {
                 .where((e) => e.value > 0)
                 .map((e) {
                   final producto = productos[e.key];
+                  final stock = producto['stock'] ?? 0;
+                  final hasStockIssue = e.value > stock;
                   return ListTile(
-                    leading: Image.asset(
+                    leading: Image.network(
                       producto['imagenProducto'],
                       width: 40,
                       height: 40,
+                      fit: BoxFit.cover,
                     ),
-                    title: Text(producto['nombre']),
-                    subtitle: Text("${l10n.quantity}: ${e.value}"),
+                    title: Text(
+                      producto['nombre'],
+                      style: TextStyle(
+                        color: hasStockIssue ? Colors.red : Colors.black,
+                      ),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${l10n.quantity}: ${e.value}"),
+                        Text(
+                          "${l10n.stock}: $stock",
+                          style: TextStyle(
+                            color: hasStockIssue ? Colors.red : Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                     trailing: Text(
                       "\$${(producto['precio'] * e.value).toStringAsFixed(2)}",
+                      style: TextStyle(
+                        color: hasStockIssue ? Colors.red : Colors.black,
+                      ),
                     ),
                   );
                 }),

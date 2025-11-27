@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application/config/resources/appColor.dart';
 import 'package:flutter_application/config/utils/Camera.dart';
 import 'package:flutter_application/models/Productos.dart';
 
@@ -18,6 +19,7 @@ class _EditarProductoState extends State<EditarProducto> {
   late TextEditingController _nombreController;
   late TextEditingController _descripcionController;
   late TextEditingController _precioController;
+  late TextEditingController _stockController;
   String? imageUrl;
   bool _disponible = true;
 
@@ -34,6 +36,9 @@ class _EditarProductoState extends State<EditarProducto> {
     _precioController = TextEditingController(
       text: widget.producto?.getPrecio.toString() ?? '',
     );
+    _stockController = TextEditingController(
+      text: widget.producto?.getStock.toString() ?? '0',
+    );
     imageUrl = widget.producto?.getImagenProducto;
     _disponible = widget.producto?.getDisponible ?? true;
   }
@@ -43,6 +48,7 @@ class _EditarProductoState extends State<EditarProducto> {
     _nombreController.dispose();
     _descripcionController.dispose();
     _precioController.dispose();
+    _stockController.dispose();
     super.dispose();
   }
 
@@ -67,7 +73,8 @@ class _EditarProductoState extends State<EditarProducto> {
   void _guardar() {
     if (_nombreController.text.isEmpty ||
         _descripcionController.text.isEmpty ||
-        _precioController.text.isEmpty) {
+        _precioController.text.isEmpty ||
+        _stockController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Todos los campos son obligatorios")),
       );
@@ -79,6 +86,16 @@ class _EditarProductoState extends State<EditarProducto> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("El precio debe ser un número válido mayor que 0"),
+        ),
+      );
+      return;
+    }
+
+    final int? stock = int.tryParse(_stockController.text);
+    if (stock == null || stock < 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("El stock debe ser un número válido mayor o igual a 0"),
         ),
       );
       return;
@@ -100,6 +117,7 @@ class _EditarProductoState extends State<EditarProducto> {
       'precio': precio,
       'imagenProducto': imageUrl,
       'disponible': _disponible,
+      'stock': stock,
     };
 
     Navigator.pop(context, productData);
@@ -147,6 +165,18 @@ class _EditarProductoState extends State<EditarProducto> {
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                ],
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _stockController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "Stock disponible",
+                  border: OutlineInputBorder(),
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+')),
                 ],
               ),
               const SizedBox(height: 20),
@@ -208,16 +238,14 @@ class _EditarProductoState extends State<EditarProducto> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size(300, 40),
-                    backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                    backgroundColor: Appcolor.backgroundColor,
                   ),
                   onPressed: _guardar,
                   child: Text(
                     widget.producto == null
                         ? "Crear Producto"
                         : "Guardar Cambios",
-                    style: const TextStyle(
-                      color: const Color.fromARGB(255, 230, 14, 14),
-                    ),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -226,14 +254,12 @@ class _EditarProductoState extends State<EditarProducto> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size(300, 40),
-                    backgroundColor: const Color.fromARGB(255, 230, 14, 14),
+                    backgroundColor: Appcolor.backgroundColor,
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: const Text(
                     "Cancelar",
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 230, 14, 14),
-                    ),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),

@@ -42,13 +42,13 @@ class _EditarUsuarioClienteState extends State<EditarUsuarioCliente> {
   void initState() {
     super.initState();
     // Inicializar con los datos del usuario
-    _generoSelecionado = widget.user.getGenero;
-    _nombreController = TextEditingController(text: widget.user.getName);
+    _generoSelecionado = widget.user.getGenero ?? Genero.Sr;
+    _nombreController = TextEditingController(text: widget.user.getName ?? '');
     _contrasenaController = TextEditingController(
-      text: widget.user.getPassword,
+      text: widget.user.getPassword ?? '',
     );
     _repiteContrasenaController = TextEditingController(
-      text: widget.user.getPassword,
+      text: widget.user.getPassword ?? '',
     );
     _edadController = TextEditingController(
       text: widget.user.getEdad?.toString() ?? '',

@@ -72,6 +72,8 @@
   "unblockedUserPrefix": "Desbloqueado:",
   "createUser": "Crear Usuario",
   "createProduct": "Crear Producto",
-  "googleLogin": "Iniciar con Google"
-  
+  "googleLogin": "Iniciar con Google",
+  "stock":"existencias",
+  "user":"Usuario"
+
 }

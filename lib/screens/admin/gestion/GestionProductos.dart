@@ -76,6 +76,7 @@ class _GestionProductosState extends State<GestionProductos> {
         precio: result['precio'],
         imagenProducto: result['imagenProducto'],
         disponible: result['disponible'],
+        stock: result['stock'] ?? 0,
       );
 
       LogicaProductos.agregarProducto(newProduct);
@@ -135,6 +136,13 @@ class _GestionProductosState extends State<GestionProductos> {
                               color: Appcolor.accent,
                             ),
                           ),
+                          Text(
+                            '${l10n.stock}: ${producto.getStock ?? 0}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
                         ],
                       ),
                       trailing: Row(
@@ -162,6 +170,7 @@ class _GestionProductosState extends State<GestionProductos> {
                                   result['precio'],
                                   result['imagenProducto'],
                                   result['disponible'],
+                                  result['stock'] ?? 0,
                                 );
                                 _cargarProductos();
                                 if (mounted) {
@@ -237,25 +246,25 @@ class _GestionProductosState extends State<GestionProductos> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(
-                  color: Appcolor.backgroundColor,
-                  width: 1.5,
-                ),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: _crearProducto,
-              child: Text(l10n.createProduct),
+              child: Text(
+                l10n.createProduct,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),
-                side: const BorderSide(
-                  color: Appcolor.backgroundColor,
-                  width: 1.5,
-                ),
+                backgroundColor: Appcolor.backgroundColor,
               ),
               onPressed: () => Navigator.pop(context),
-              child: Text(l10n.returnText),
+              child: Text(
+                l10n.returnText,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
